@@ -35,7 +35,7 @@
 
 **Points:** 10 - Tool Documentation: 2-3 working test datasets (5), codebook (5)
 
-**Status:** `in_progress`
+**Status:** `done`
 
 **Owner:** `Claude (overnight coordinator); prior draft by Mohammed Albarrak`
 
@@ -47,7 +47,7 @@
 
 **Definition of done:** python -m pytest tests/test_data.py tests/test_loader.py -q && test -f data/stable.csv && test -f data/planted_events.csv && test -f data/edge_case.csv && test -f data/README.md; tests prove file schemas, checkpoint counts, shared baseline, seeded reproducibility, planted signals and missing-snapshot case. app/data_loader.py rejects invalid row counts and duplicates with row numbers and filters weekdays/rush windows; its tests pass here.
 
-**Result:** `—`
+**Result:** `data/generate.py (seed 20261016, fixed integer patterns) writes stable/planted_events 7200 rows and edge_case 1432 rows, codebook data/README.md, app/data_loader.py load_dataset; DoD printed 57 passed, exit 0; via qc: stable 0 flags, planted only S08 PM day12 plus maintenance days 13-15`
 
 ### H-03 — One exact-binomial p-chart function with numeric tests
 
