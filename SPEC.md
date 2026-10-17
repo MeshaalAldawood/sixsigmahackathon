@@ -120,10 +120,13 @@ Fixed for every team:
 ## 5. Delivery (rubric: working tool 25)
 - **Stack:** REST API (FastAPI, Python) that also serves one built React (Vite) page: **one deployed
   service** on Posit Connect, so there is no CORS and no second content item.
-  API: `GET /api/datasets` and `GET /api/report?dataset=<name>`; `<name>` must be one of the bundled  
-  **Nonbreaking replay extension:** `GET /api/replay/timeline?dataset=<name>` lists the selectable post-baseline timestamps (not future measurements), and `GET /api/report?dataset=<name>&as_of=YYYY-MM-DDTHH:MM` returns the same report shape calculated using only observations at or before that simulated time. Without `as_of`, the existing complete historical report remains unchanged. Both endpoints use the same strict three-filename allowlist. React only requests and renders server-computed values.
-  
+  API: `GET /api/datasets` and `GET /api/report?dataset=<name>`; `<name>` must be one of the bundled
   files in `data/` (no arbitrary paths). The report holds both windows and the maintenance chart.
+- **Nonbreaking replay extension:** `GET /api/replay/timeline?dataset=<name>` lists selectable
+  post-baseline timestamps (not future measurements); `GET /api/report?dataset=<name>&as_of=YYYY-MM-DDTHH:MM`
+  returns a report computed using only observations at/before the synthetic time. Without `as_of`,
+  the existing full historical report is unchanged. Use the same three-filename allowlist.
+  React only requests and displays server-computed values.
 - **Starting demo:** `demos/fastapi/` copied into `app/`; the React page from `demos/reactfront/` goes in `app/frontend/` (task H-05) and its built `dist/` is served by FastAPI.
 - **Code split:** `app/qc.py` (the p-chart function, written and tested first, then frozen);
   `app/availability.py` and `app/maintenance.py` (each builds its subgroups from the CSV and calls
@@ -149,10 +152,14 @@ Fixed for every team:
       stepped UCL and LCL (they move with n), and the 0.10 target line; out-of-control days in red.
       How to read it: a red point is a one-off to investigate; points inside the limits but above
       the target line mean a built-in problem that vans will not fix.
-  - **Maintenance tab:** the network p-chart of the broken-bike share per weekday, and the list of  - **Replay strip (both tabs):** unmistakable "SIMULATED LIVE — SYNTHETIC DATA" label, displayed synthetic date/time, Play/Pause/Step/Reset, speed, and jump to the planted event. A current-status view shows available/disabled bikes, available docks, and last snapshot time per station; missing/stale observations are labeled. Do not describe replay as a genuine live connection. Historical mode uses full history, while replay mode hides later observations and marks an unfinished window provisional.
-
+  - **Maintenance tab:** the network p-chart of the broken-bike share per weekday, and the list of
     stations to inspect, most broken bikes first. How to read it: a red point means more bikes broke
     than normal; work down the list.
+  - **Replay strip (both tabs):** unmistakable "SIMULATED LIVE — SYNTHETIC DATA" label, displayed
+    synthetic date/time, Play/Pause/Step/Reset, speed, and jump to incident days. The latest
+    station-status panel shows available/disabled bikes, free docks, and observation time.
+    Missing/stale data is labeled. Historical mode remains; replay hides future observations
+    and marks incomplete rush windows provisional.
 
 ## 7. Test datasets and codebook (rubric: demo 10, datasets 5, codebook 5)
 2-3 small CSVs in `data/`, invented but shaped like real field data, each showing one behavior.
@@ -168,10 +175,14 @@ collect this data for real.
     broken-bike share doubles. Both must flag; no baseline day may.
   - `edge_case.csv`: 2 stations x 15 weekdays: one never empty or full (p-bar = 0, "insufficient
     basis"), and missing snapshots on some days (n < 24, so the limits step up).
-  `data/README.md` gives every column with units, the baseline, how each file was generated (with  **Replay reuses these exact three files and their timestamp fields.** In real operations, a collector discovers the operator's GBFS `station_status.json` feed through `gbfs.json`, polls it periodically (e.g. five minutes), appends the actual observation timestamp and station ID with the three status counts to persistent storage, handles incomplete/stale/missing updates, and retains ten known-normal weekdays. Document that workflow and differences between feed update times, polling times, and local rush-hour time zones in `data/README.md`; no live collector is implemented.
-
+  `data/README.md` gives every column with units, the baseline, how each file was generated (with
   the random seed), the chart behavior each one should show, and how a real operator would log the
   GBFS feed to get the same file.
+- **Replay reuses exactly these three CSVs.** A real operator would discover `station_status.json`
+  from its GBFS discovery feed, poll roughly every five minutes, log observation timestamps,
+  station IDs and the three status counts, handle missing/stale updates, convert UTC timestamps
+  to the operator's local rush-hour timezone, and retain known-normal baseline history.
+  Document this sourcing method in `data/README.md`, but do not implement actual live polling.
 
 ## 8. Documentation and reproducibility (rubric: docs 10, public repo 5)
 - `README.md` says what the tool does, for whom, every input and parameter, how to run it in one
@@ -182,8 +193,9 @@ collect this data for real.
 ## 9. Out of scope
 What we will NOT build, so nobody (human or agent) builds it by accident.
 - Default: logins, databases, real customer data, a second statistic before the first one is tested.
-- No live polling of a GBFS feed (the tool reads bundled CSVs); no file upload; no maps; no van- **Exception approved:** synthetic timestamp replay of the bundled CSVs in the dashboard. Still no network polling, WebSockets, background data ingestion or production persistent storage.
-
-  assignment, routing or crew scheduling; no demand forecasting; no repair-time estimates; no ML;
-  no extra charts or visual polish before the tests pass. Stretch, only if everything else is done
-  and deployed: a time-to-empty reliability model with censoring.
+- No live polling of a GBFS feed; no file upload; no maps; no van assignment, routing or crew
+  scheduling; no demand forecasting; no repair-time estimates; no ML; no additional statistical
+  method before the exact-binomial p-chart is verified.
+- **Approved exception:** timestamp-based **synthetic replay** of the existing bundled CSVs
+  in the dashboard. Still no WebSockets, external feed integration, background collector or
+  production persistent storage. Visual polish comes after numerical tests pass.
