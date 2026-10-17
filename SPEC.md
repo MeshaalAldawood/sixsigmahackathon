@@ -1,74 +1,54 @@
-# SPEC: Six Sigma Hackathon team project
+# SPEC: Bike-sharing station decisions (two-hour MVP)
 
-What your tool IS. Your agent reads this before every task. Where the code and this file
-disagree, the code is the bug: change this file first, then the code.
-
-Most of this page is already decided by the event and the [rubric](docs/criteria.md).
-**Only the `FILL IN` lines change, and you do not have to write them by hand:** describe your app and ask your agent to update them. They depend on the prompt your team picks at kickoff
-(prompts are secret until then, see [`docs/prompts.md`](docs/prompts.md)) and on your team.
-The examples after each `FILL IN` show the shape of an answer. They are not hints about the prompts.
+This is the product contract. Follow the [hackathon rubric](docs/criteria.md). Implement **only** what is written here. Synthetic data is explicitly labeled; unconfirmed event information remains TBD.
 
 ## 1. Team and prompt
-- **Team name:** FILL IN. Example: "Control Freaks"
-- **Track:** FILL IN, on-campus (24 hours) or Virtual DL Challenge (7 days). See [`docs/schedule.md`](docs/schedule.md).
-- **Prompt we chose:** FILL IN, the prompt number and title, copied from the [Devpost](https://six-sigma-hackathon.devpost.com/) challenge page at kickoff.
-- **Our public repo:** FILL IN. Example: "github.com/our-team/our-tool"
+- **Team name:** TBD — confirm with team.
+- **Track:** TBD — confirm on-campus or virtual.
+- **Prompt we chose:** TBD — insert exact Devpost prompt number and title before submission.
+- **Our public repo:** https://github.com/MeshaalAldawood/sixsigmahackathon (confirm this is the submission repo).
 
 ## 2. User and use case (rubric: scope 5, user and use case 5)
-- **User:** FILL IN, one named kind of person, not "everyone". Example: "the supervisor who checks part diameters at the end of each shift"
-- **Decision the tool helps them make, and when:** FILL IN. Example: "whether to stop the line and recalibrate before the next shift starts"
-- **Why this matches the prompt:** FILL IN, one sentence.
+- **User:** Bike-sharing operations supervisor reviewing station status.
+- **Decision A — Availability:** Which stations cannot serve rentals or returns, and should we add or remove a working bike?
+- **Decision B — Maintenance:** Which stations have broken bikes, and which should be inspected/collected first?
+- **Prompt fit:** Bike availability and broken-bike maintenance; confirm exact wording against the official prompt.
+- **Boundary:** Prioritize stations, **not** vans, trips, routes, or work schedules. The two analyses are independent.
 
 ## 3. Inputs (rubric: minimal inputs 5)
-Only what this user can actually measure or already knows. Fewer is better; every input a user
-cannot measure costs points.
+One CSV with one row per station per daily checkpoint:
 
-| Input | Type and units | Where the user gets it |
+| Column | Type / units | Meaning |
 |---|---|---|
-| FILL IN. Example: `measurements.csv`, one row per part | numeric, mm | their gauge log |
+| `timestamp` | ISO date `YYYY-MM-DD` | Scheduled checkpoint |
+| `station_id` | text | Station |
+| `total_docks` | integer / docks | Usable dock positions |
+| `working_bikes` | integer / bikes | Rentable bikes occupying docks |
+| `broken_bikes` | integer / bikes | Broken bikes occupying docks |
+
+Derived: `empty_docks = total_docks - working_bikes - broken_bikes`. Reject missing values, negative counts, duplicate station/date pairs, or occupancy exceeding capacity. Each checkpoint must cover the same stations. Snapshots do **not** measure downtime, repair events, or rider demand.
 
 ## 4. The statistics, and why (rubric: valid QC analysis 25)
-Say the method in words before any code exists. Load the `stats-first-steering` skill first.
-- **Method:** FILL IN. Example: "X-bar and R chart, subgroups of 5, limits from the average range"
-- **Why it fits the use case:** FILL IN, one sentence.
-- **Assumptions and how the tool checks them:** FILL IN. Example: "normality: histogram plus Shapiro-Wilk in the demo"
-- **Known-answer check:** FILL IN, a textbook example or hand calculation the function must reproduce.
-
-Fixed for every team:
-- The statistic lives in **one plain, tested function** (`app/qc.py` or `app/qc.R`). The API, app or
-  package only calls it and displays the result. No statistics inside UI code.
-- Every statistic has a test against a known answer and a degenerate case (constant data, n = 1, missing values).
-- You can explain every number the tool prints. If you cannot, it is not done.
+- **One method:** A **p control chart**, computed by a single tested Python function and reused in both modules. The first **20 checkpoints** form the fixed baseline. For each date, `p = failures / opportunities`.
+- **Availability chart:** Failure = a station with `working_bikes == 0` **OR** `empty_docks == 0`; opportunity = a station observed. Show one network-level chart. Latest-snapshot rules: no working bikes and an empty dock -> **add 1 working bike**; no empty docks and a working bike -> **remove 1 working bike**; all docks occupied by broken bikes -> **collect a broken bike first**. Otherwise no action. List actionable stations first, sorted by `station_id` for deterministic ties.
+- **Maintenance chart:** Failure = a docked bike that is broken; opportunity = any docked bike (`working_bikes + broken_bikes`). Latest-snapshot rule: list stations with `broken_bikes > 0`, sorted by broken-bike count descending, then `station_id`; action = **inspect/collect broken bikes**. No repair ETA.
+- **Formula:** `p_bar = sum(baseline failures)/sum(baseline opportunities)`; `LCL = max(0, p_bar - 3*sqrt(p_bar*(1-p_bar)/n))`; `UCL = min(1, p_bar + 3*sqrt(p_bar*(1-p_bar)/n))`, where `n` is the daily opportunity count. Flag `p < LCL` or `p > UCL`. Control limits are **not** operating targets.
+- **Assumptions:** Comparable checkpoints; binomial-style proportion data. If fewer than 20 checkpoints, zero opportunities, `p_bar` of 0 or 1, or `n*p_bar < 5` / `n*(1-p_bar) < 5`, show **insufficient basis for standard p-chart limits**, not an invented alert. Because repeated station/bike snapshots may be correlated, label control-chart signals *exploratory* rather than validated false-alarm probabilities.
+- **Known answer:** For baseline 10/100, `p_bar=0.10`, `LCL=0.01`, `UCL=0.19`; monitored 25/100 (`p=0.25`) flags above UCL. Test this plus invalid counts and missing/insufficient data. Keep statistics separate from UI.
 
 ## 5. Delivery (rubric: working tool 25)
-- **Stack:** FILL IN, one of: R package, Python library, REST API (FastAPI or plumber), dashboard (React or Shiny).
-- **Starting demo:** FILL IN, the one folder copied from [`demos/`](demos/README.md) into `app/`. Example: `demos/fastapi/`
-
-Fixed for every team:
-- Start from **one** demo in `demos/`, copied to `app/`. Keep its four-script contract
-  (`testme`, `manifestme`, `deployme`, `README.md`); `testme` starts the tool with one command.
-- Deployed on the course **Posit Connect** server with a public URL (publisher key handed out at the
-  event). Deploy early: copy one workflow from
-  [`.claude/skills/connect-publish/workflows/`](.claude/skills/connect-publish/workflows/).
-- A small tool that runs beats a large tool that does not.
+- **Stack:** The existing `demos/fastapi/` starter, Python calculations, **one minimal React/Vite page**. One deployed FastAPI service should serve the built React page and JSON results; no second deployed service.
+- **API:** `GET /api/datasets` and `GET /api/report?dataset=<approved_filename>`; accept only the two bundled datasets (no arbitrary paths). Both reports are available independently and read the same validated CSV schema.
+- **Implementation split:** `app/qc.py` shared and frozen first; `app/availability.py` and `app/maintenance.py` have separate tests and must not import one another. Minimal integration in the API and UI. Preserve the starter's `testme`, `manifestme`, `deployme`, and README scripts. Deploy on course Posit Connect; credentials provided separately.
 
 ## 6. Outputs
-- **What the user sees:** FILL IN, a number, chart or pass/fail, with units and a one-line "how to read this".
-  Example: "a control chart with out-of-control points in red, plus 'stop the line: yes/no'"
+One page: **dataset selector, Availability tab, Maintenance tab**. Each tab shows **one** p-chart (points, center line, control limits or warning), **one** table of prioritized stations with counts, and a plain-English recommended action. Show "Synthetic demonstration data." No map, login, upload, or additional pages.
 
 ## 7. Test datasets and codebook (rubric: demo 10, datasets 5, codebook 5)
-2-3 small CSVs in `data/`, invented but shaped like real field data, each showing one behavior.
-`data/README.md` is the codebook: every file, every column with units, and what it would take to
-collect this data for real.
-- **Datasets:** FILL IN. Example: "`in_control.csv`, `planted_shift.csv` (mean shifts at row 40), `edge_case.csv` (one subgroup)"
+Exactly **two synthetic CSV files** in `data/` using §3: `stable.csv` (20 baseline checkpoints plus subsequent stable observations) and `deterioration.csv` (same baseline plus a clearly planted increase). Use enough stations/bikes that p-chart approximation checks pass in the intended demos. `data/README.md` defines every field, units, baseline, generation rules, expected chart behavior, and real-world collection equivalent. Edge cases belong in unit tests rather than a third CSV.
 
 ## 8. Documentation and reproducibility (rubric: docs 10, public repo 5)
-- `README.md` says what the tool does, for whom, every input and parameter, how to run it in one
-  command, and walks through the demo on each test dataset.
-- Public GitHub repo; a fresh clone runs `testme` and the tests pass with no extra steps.
-- Submit on Devpost: the repo link plus a demo.
+A fresh clone must run the app with `app/testme.sh` and pass `pytest`. Tests cover the hand calculation, bad data, both priority rules, and a planted chart signal. README describes input, two decisions, charts, run command, two dataset demonstrations, and public URL. Submit repo and demo on Devpost.
 
 ## 9. Out of scope
-What we will NOT build, so nobody (human or agent) builds it by accident.
-- Default: logins, databases, real customer data, a second statistic before the first one is tested.
-- FILL IN, anything else. Example: "no forecasting; no multi-plant comparison"
+No real-world integrations, uploads, forecasting, demand estimation, travel-time estimates, maps, vehicle routing, van assignment, repair scheduling, user accounts, database, ML, extra charts, or visual polish before passing tests. Do **not** add features to fill time.
