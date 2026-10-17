@@ -219,7 +219,7 @@
 
 **Priority:** `P1`
 
-**Status:** `in_progress`
+**Status:** `done`
 
 **Owner:** `Codex implementer: h12_dashboard`
 
@@ -231,7 +231,7 @@
 
 **Definition of done:** npm --prefix app/frontend ci && npm --prefix app/frontend run test -- --run && npm --prefix app/frontend run build && python -m pytest tests/test_static.py -q exit 0; browser QA covers all three datasets, both windows, maintenance, rewind, null values, keyboard access and 1440px/768px/375px layouts with recorded screenshots and observations.
 
-**Result:** `—`
+**Result:** `4 vitest + 3 static tests passed, bundle rebuilt; Playwright QA at 1440/768/375 across all three datasets, both windows, maintenance, keyboard rewind and null limits recorded in docs/integration.md with screenshots.`
 
 ### H-13 — Windows startup, CI and release bundle
 
