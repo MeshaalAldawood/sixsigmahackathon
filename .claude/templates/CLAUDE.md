@@ -1,10 +1,10 @@
 # CLAUDE.md: <tool name>
 
-Read before doing anything: `SPEC.md` (what the tool is) and `CONTRACT.yaml` (what is being done).
+Read before doing anything: `SPEC.md` (what the tool is) and `CONTRACT.md` (what is being done).
 `AGENTS.md` mirrors this file for other agents; keep the two in step.
 
 ## How work happens here
-- **One task at a time.** Nothing gets built that is not a task in `CONTRACT.yaml`. No task? Propose one
+- **One task at a time.** Nothing gets built that is not a task in `CONTRACT.md`. No task? Propose one
   and wait for a human to agree.
 - Check the task out before starting; check it in (`status: done` + a one-line `result`) in the same
   commit as the work. Write only inside the task's `owns` paths.
