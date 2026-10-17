@@ -1,179 +1,276 @@
-# CONTRACT.yaml - the task ledger for your hackathon project.
+# CONTRACT.yaml - the task ledger for this Six Sigma Hackathon project.
 # SPEC.md says what the tool IS. This file says what is being DONE.
-# These eight tasks cover the hackathon rubric (docs/criteria.md).
-# Architecture and sequence live in docs/plan.md, NOT in this ledger.
+# Match the upstream contract-ledger template: tasks, owners, owned paths,
+# runnable completion checks, status updates, and same-commit check-ins.
 #
-# How to use it (humans and agents alike; see contract-ledger skill):
-#   1. Nothing gets built unless covered by a task here. Add a new task
-#      (H-09, H-10, ...) with teammate approval if truly needed.
-#   2. One in_progress task per person or agent at a time.
-#   3. Check OUT: status: in_progress, owner, started_at.
-#   4. Check IN: status: done + actual test result in the SAME commit as work.
-#   5. Run each definition_of_done exactly and paste its output.
-#   6. Write only in the task's owns paths.
-#   7. Quote strings containing a colon. No tabs.
-#   8. Write tests and documentation AS YOU BUILD each task; H-07 audits them.
-#   9. H-05 frontend work starts ONLY after the H-04 backend gate passes.
-# Check format: python -c "import yaml; yaml.safe_load(open('CONTRACT.yaml'))"
+# 1. No work without a task. Use only the named task's owns paths.
+# 2. Check OUT (status, owner, started_at) before each task; check IN
+#    (status: done, real one-line result) in the same commit as its work.
+# 3. Run definition_of_done and record actual output; no unverified "done".
+# 4. Tests and task-specific documentation ship WITH each implementation task.
+# 5. H-09 and H-10 intentionally appear before H-04: their independent
+#    work must finish before the API/backend gate. Execute in LIST ORDER,
+#    not numeric ID order. H-02/H-03 and H-09/H-10 may run in parallel
+#    for different people, with no overlapping owned paths.
+# 6. HARD GATE: H-05 frontend starts only after H-04's backend checks pass.
+# 7. SPEC is finalized by the team. Never silently change its methods,
+#    datasets, policy thresholds or actions; ask if a contradiction blocks code.
+# 8. Keep credentials out of committed files. No extra features.
+# YAML check: python -c "import yaml; yaml.safe_load(open('CONTRACT.yaml'))"
 
 spec: SPEC.md
-updated: "2026-10-16"
+updated: "2026-10-17"
 
 tasks:
   - id: H-01
-    title: Finalize SPEC.md and concise architecture plan
-    points: "15 - Tool Design: scope matches prompt (5), user/use case (5), minimal inputs (5)"
+    title: Confirm finalized SPEC and record implementation decisions
+    points: "15 - Tool Design: prompt alignment (5), clear user/decision (5), minimal inputs (5)"
     status: todo
     owner: ""
     started_at: ""
     owns: ["SPEC.md", "docs/plan.md"]
     notes: >
-      SPEC is drafted but team name, track and exact Devpost challenge are
-      unconfirmed. Preserve its two station decisions and agreed scope.
-      docs/plan.md contains architectural decisions, task sequencing and risks.
-      Ask the team for missing facts; do not invent them.
+      The uploaded SPEC is the finalized product contract; preserve its full
+      nine-section template. Align docs/plan.md with exact binomial p-charts,
+      AM/PM station windows, maintenance at 07:00, fixed 0.10 target, three
+      datasets, one FastAPI plus React deployment, and backend-first sequencing.
+      Only team name and official Devpost prompt number remain to confirm;
+      do not guess them or block initial code on these metadata blanks.
     definition_of_done: >
-      test -f docs/plan.md && ! grep -q 'TBD' SPEC.md; every teammate can
-      explain both station decisions and the one p-chart method aloud.
+      test -f docs/plan.md && grep -q "exact binomial" docs/plan.md &&
+      grep -q "planted_events.csv" SPEC.md &&
+      grep -q "edge_case.csv" SPEC.md; team has reviewed this finalized scope.
     result: ""
 
   - id: H-02
-    title: Two synthetic datasets, validation and codebook
-    points: "10 - Tool Documentation: 2 working test datasets (5), codebook (5)"
+    title: Three reproducible rush-hour CSV datasets and codebook
+    points: "10 - Tool Documentation: 2-3 working test datasets (5), codebook (5)"
     status: todo
     owner: ""
     started_at: ""
-    owns: ["data/stable.csv", "data/deterioration.csv", "data/README.md", "app/data_loader.py", "tests/test_data_loader.py"]
+    owns: ["data/", "tests/test_data.py"]
     notes: >
-      Keep the exact five-column SPEC schema. Generate a shared 20-day
-      baseline with stable and planted-deterioration follow-ups; validate
-      counts, station coverage, dates and occupancy. In the SAME task write
-      data/README.md explaining units, synthetic generation and how real
-      observations would be collected. Do not claim synthetic data is real.
+      Create stable.csv, planted_events.csv, edge_case.csv and data/README.md
+      with a recorded random seed and generation method. EXACT input columns:
+      timestamp,station_id,num_bikes_available,num_bikes_disabled,
+      num_docks_available. Normal/event datasets: 10 stations x 15 weekdays
+      x 48 five-minute snapshots (24 AM 07:00-08:55 and 24 PM 16:00-17:55);
+      first 10 weekdays are the shared baseline. Edge dataset: 2 stations x
+      15 weekdays with one always-usable station and missing snapshots.
+      Plant: day-12 PM stadium full-station anomaly, broken-bike share
+      doubles starting day 13. Include residential/downtown opposing rush
+      patterns, chronic hilltop above 0.10 but in control, stable broken share.
+      Never represent synthetic values as real observations. Codebook documents
+      units, seed, expected flags, stable false-alert count and GBFS logging.
     definition_of_done: >
-      python -m pytest tests/test_data_loader.py -q && test -f
-      data/stable.csv && test -f data/deterioration.csv &&
-      test -f data/README.md; tests verify schema and planted scenario.
+      python -m pytest tests/test_data.py -q &&
+      test -f data/stable.csv && test -f data/planted_events.csv &&
+      test -f data/edge_case.csv && test -f data/README.md;
+      tests prove file schemas, checkpoint counts, shared baseline,
+      seeded reproducibility, planted signals and missing-snapshot case.
     result: ""
 
   - id: H-03
-    title: Core QC p-chart as one plain tested function
-    points: "25 - Tool Implementation: valid QC analysis in Python"
+    title: One exact-binomial p-chart function with numeric tests
+    points: "25 - Tool Implementation: valid quality-control statistics in Python"
     status: todo
     owner: ""
     started_at: ""
-    owns: ["app/qc.py", "tests/test_qc.py", "docs/statistics.md"]
+    owns: ["app/qc.py", "app/requirements.txt", "tests/test_qc.py", "docs/statistics.md"]
     notes: >
-      Load stats-first-steering. Implement exactly the SPEC p-chart in
-      framework-free Python. Verify baseline p-bar=0.10, LCL=0.01,
-      UCL=0.19 for n=100, and 25/100 flags high. Test insufficient
-      baseline, zero opportunities, inappropriate normal approximation,
-      and invalid input. Document assumptions and repeated-snapshot
-      correlation during implementation; exploratory signals only.
+      Load stats-first-steering first. Implement the one tested p-chart
+      statistic with exact binomial tail limits alpha=0.00135 and
+      Western Electric rule 1 only; never substitute normal 3-sigma limits.
+      Core arithmetic must accept a four-day hand-calculation fixture
+      independent of the application's minimum-ten-baseline-day gate.
+      Check availability: baseline d=2,4,3,3 with n=24 each =>
+      p_bar=.125, n24 upper count 9/UCL=.375, n20 upper count 8/UCL=.40,
+      d10 high, d8 not high; lower count 0. Maintenance: 10/100 =>
+      upper count 20/UCL=.20, lower count 2/LCL=.02; d25 high,
+      d20 not; d<=1 below lower limit. Test p_bar=0/1, n=0,
+      insufficient baseline at report level, missing inputs and varying n.
+      Use scipy.stats.binom.sf/cdf as source of exact tails and pin dependencies.
+      Write docs/statistics.md now, including correlation/exploratory warning.
     definition_of_done: >
-      python -m pytest tests/test_qc.py -q && test -f
-      docs/statistics.md; tests reproduce the four known-answer numbers
-      and invalid/degenerate cases.
+      python -m pytest tests/test_qc.py -q &&
+      test -f docs/statistics.md; numeric assertions reproduce every
+      SPEC section-4 hand answer including changed-n limits,
+      boundary equality, lower flags and invalid cases.
+    result: ""
+
+  - id: H-09
+    title: Availability AM/PM decision module and tests
+    points: "25 - Working-tool implementation (availability portion)"
+    status: todo
+    owner: ""
+    started_at: ""
+    owns: ["app/availability.py", "tests/test_availability.py", "docs/availability.md"]
+    notes: >
+      Separate station p-charts for AM and PM; subgroup is station x weekday
+      x rush window, d=count of unusable snapshots, n=count actually logged.
+      Unusable = bikes_available==0 OR docks_available==0. Empty and full
+      counts remain distinct. Baseline is first 10 weekdays; target=.10
+      is an SLA target, NOT a statistical control limit. Compute median first
+      empty/full clock times over baseline affected days with numerator/
+      denominator wording, e.g. "07:40 on 3 of 10 days". Follow EXACT
+      first-match action precedence from SPEC: full with disabled bikes =>
+      collect first; high special-cause flag => investigate PLUS van direction;
+      in-control but p_bar > .10 => capacity review; then empty>full drop
+      or full>empty pull BEFORE typical onset time; otherwise OK.
+      Actionable rows first; tie station_id; show both windows and latest-day
+      table. Missing snapshot reduces n; n=0 gets no limits/warning.
+      Must not import maintenance module. Document rules as this is built.
+    definition_of_done: >
+      python -m pytest tests/test_availability.py -q &&
+      test -f docs/availability.md; tests cover AM/PM separation,
+      exact control limits, actions/precedence, missing snapshots,
+      chronic target vs special-cause signal, median time and ties.
+    result: ""
+
+  - id: H-10
+    title: Maintenance 07:00 network p-chart and station list
+    points: "25 - Working-tool implementation (maintenance portion)"
+    status: todo
+    owner: ""
+    started_at: ""
+    owns: ["app/maintenance.py", "tests/test_maintenance.py", "docs/maintenance.md"]
+    notes: >
+      One daily NETWORK subgroup at 07:00 only: d=sum disabled bikes
+      and n=sum available plus disabled bikes across stations.
+      Use exact-binomial QC function, first 10 weekdays as baseline,
+      and one point per weekday. At most recent 07:00 snapshot, sort
+      broken-bike stations by disabled-bikes descending then station_id.
+      Action "inspect and collect broken bikes", no repair estimates.
+      No availability-module import. Warn if n=0 or baseline invalid.
+      Document fields, assumptions and warnings in same task.
+    definition_of_done: >
+      python -m pytest tests/test_maintenance.py -q &&
+      test -f docs/maintenance.md; tests cover 07:00 aggregation,
+      no duplicate counting, exact binomial flags, changing broken share,
+      zero denominator, station ordering and ties.
     result: ""
 
   - id: H-04
-    title: Working backend - both decision modules and FastAPI
-    points: "25 - Tool Implementation: effective working tool"
+    title: Complete FastAPI backend and pass hard backend test gate
+    points: "25 - Tool Implementation: effective, working REST API"
     status: todo
     owner: ""
     started_at: ""
-    owns: ["app/availability.py", "app/maintenance.py", "app/app.py", "app/requirements.txt", "app/testme.sh", "app/manifestme.sh", "app/deployme.sh", "app/.python-version", "app/README.md", "tests/test_availability.py", "tests/test_maintenance.py", "tests/test_api.py", "tests/conftest.py", "docs/availability.md", "docs/maintenance.md", "docs/api.md"]
+    owns: ["app/app.py", "app/data_loader.py", "app/__init__.py", "app/testme.sh", "app/manifestme.sh", "app/deployme.sh", "app/.python-version", "app/README.md", "tests/test_api.py", "tests/test_loader.py", "docs/api.md"]
     notes: >
-      Copy demos/fastapi starter; use only frozen validated inputs and
-      QC interface. Developer A implements availability, Developer B
-      implements maintenance, and integrator wires app.py. Separate files;
-      modules must not import each other. Serve GET /api/datasets and
-      GET /api/report with whitelisted dataset names; API must work
-      with no frontend present. Documentation for rules, fields, endpoints
-      and startup is produced WITH this work. This is the HARD BACKEND GATE:
-      all Python tests, both datasets and invalid-file cases must pass
-      before H-05 begins. Document observable results; no invented scores.
+      Start after H-02, H-03, H-09 and H-10 are implemented and verified.
+      Copy/adapt demos/fastapi (preserve its four-script contract).
+      Reject invalid source records naming row number; ignore weekends
+      and outside-window snapshots, tolerate missing observations.
+      Serve GET /api/datasets (three whitelisted CSVs) and
+      GET /api/report?dataset=<name> with availability AM and PM station
+      results, exact p-chart points, chart warnings, maintenance results.
+      No arbitrary file paths, no live feeds and no statistics in API.
+      API must work without frontend assets and serve a built dist if
+      present. Imports must pass from repo root AND with app/ as cwd.
+      Write app/README.md and docs/api.md during implementation.
+      HARD GATE: do not check this in or start H-05 frontend before all
+      backend tests pass with all three datasets and edge cases.
     definition_of_done: >
-      python -m pytest tests -q exits 0, including known-answer p-chart,
-      independent availability and maintenance recommendations, both CSV
-      scenarios and both FastAPI endpoints; app/testme.sh starts the API
-      with one command and app/README.md documents it.
+      python -m pytest tests/test_data.py tests/test_qc.py
+      tests/test_availability.py tests/test_maintenance.py
+      tests/test_loader.py tests/test_api.py -q exits 0;
+      test -f app/testme.sh && test -f app/manifestme.sh &&
+      test -f app/deployme.sh && test -f app/README.md &&
+      test -f docs/api.md; verify both API endpoints with stable,
+      planted_events, edge_case and invalid-name requests and
+      startup from both the repo root and app/ directory.
     result: ""
 
   - id: H-05
-    title: Minimal frontend integration and two-dataset demonstration
-    points: "10 - Tool Design: clear demonstration using test datasets"
+    title: Minimal React frontend after backend gate and demo walk-through
+    points: "10 - Tool Design: clear demonstration on three test datasets"
     status: todo
     owner: ""
     started_at: ""
-    owns: ["app/frontend/", "app/static/", "tests/test_static.py", "demo/README.md", "docs/integration.md"]
+    owns: ["app/frontend/", "app/static/", "tests/test_static.py", "docs/integration.md", "demo/README.md"]
     notes: >
-      START ONLY WHEN H-04 IS DONE and all backend tests pass.
-      Build one React/Vite page: dataset selector, two tabs, chart and
-      priority table per tab, and visible synthetic-data warning.
-      Frontend displays backend JSON only; no browser-side statistics.
-      Build frontend into app/static so existing FastAPI serves UI+API
-      on one origin. Document exact demonstration for both datasets
-      in demo/README.md and packaging in docs/integration.md.
+      DO NOT START BEFORE H-04 IS DONE. Start from demos/reactfront/
+      under app/frontend/ and build dist to app/static/ (same API origin).
+      Page: selector for all three datasets, persistent synthetic/exploratory
+      warning, Availability tab with AM/PM switch, latest-day dispatch
+      table, station selector and station p-chart including stepped UCL/LCL,
+      centerline, target=.10, red flags, median first-unusable time.
+      Maintenance tab: network 07:00 chart, ranked broken-bike list.
+      React must render backend results, not recalculate any statistic.
+      demo/README.md records observed output and stable false-alert count
+      for each dataset; docs/integration.md documents build/serve steps.
     definition_of_done: >
-      npm --prefix app/frontend run build && python -m pytest tests -q
-      pass; local FastAPI serves both API routes and React page from one
-      origin; demo/README.md explains both CSVs and visible outputs.
+      npm --prefix app/frontend run build &&
+      python -m pytest tests/test_static.py -q &&
+      python -m pytest -q; one local FastAPI origin renders a built React
+      page, three datasets, AM/PM station and maintenance charts,
+      recommended actions and warning states; demo/README.md
+      walks through all three examples with actual observed results.
     result: ""
 
   - id: H-06
-    title: Deploy to course Posit Connect with one public URL
-    points: "Protects 25 working-tool points: judges can open the tool"
+    title: Deploy one bundled FastAPI and React app to Posit Connect
+    points: "Protects 25 working-tool points - public app required"
     status: todo
     owner: ""
     started_at: ""
     owns: ["app/data/", "app/manifest.json", ".github/workflows/", ".github/scripts/", "docs/deployment.md"]
     notes: >
-      Bundle the two CSVs into app/data without changing the root sources.
-      Rebuild React assets under app/static, regenerate manifest locally,
-      use app/deployme.sh for fastest first publish, and follow the
-      connect-publish skill for any GitHub Actions workflow. Never commit
-      secrets. Record real deployment commands, problems and URL in
-      docs/deployment.md while deploying; do not claim done without access.
+      Source CSVs remain in root data/ and are copied into app/data/
+      for Connect deployment from app/. Include built React static assets,
+      all required Python modules and pinned dependencies.
+      Follow connect-publish instructions and the four scripts.
+      Use actual course Connect publisher credentials from local secret
+      settings; NEVER commit keys, tokens or server secret values.
+      Produce docs/deployment.md with real commands/errors/URL while working.
     definition_of_done: >
-      The published URL loads the React page and valid JSON reports for
-      both datasets from a logged-out browser with HTTP 200, and
-      docs/deployment.md records actual commands and verified URL.
+      A public Posit Connect URL, visited logged out, serves the React
+      page and all three whitelisted reports with HTTP 200;
+      deployment docs contain actual test commands/results and URL,
+      and app/data/ contains the exact three approved CSVs.
     result: ""
 
   - id: H-07
-    title: README and documentation verification
-    points: "10 - Tool Documentation: excellent easy-to-follow documentation"
+    title: Audit incremental documentation and reproducibility
+    points: "10 - Tool Documentation: complete user and function documentation"
     status: todo
     owner: ""
     started_at: ""
     owns: ["README.md", "docs/verification.md"]
     notes: >
-      This is an AUDIT, not deferred writing: H-02 through H-06 already
-      document datasets, statistics, both modules, API, integration
-      and deployment as they work. Consolidate run instructions and
-      sources into README.md. Have a teammate reproduce the demo.
-      Record any fixes required in docs/verification.md.
+      Documentation was produced alongside each implementation task:
+      data/README.md, docs/statistics.md, docs/availability.md,
+      docs/maintenance.md, docs/api.md, docs/integration.md,
+      docs/deployment.md and demo/README.md. THIS IS AN AUDIT,
+      not an end-of-project documentation writing phase.
+      Root README explains who/decision, every input/parameter,
+      exact p-chart rules and assumptions, how to run, and
+      one worked demo per each of the three datasets.
+      Record an independent review in docs/verification.md.
     definition_of_done: >
-      python -m pytest tests -q passes; README.md and all per-task docs
-      explain inputs, outputs, exact run command, assumptions and both
-      demonstration cases; a teammate can reproduce from a fresh clone.
+      python -m pytest -q passes and test -f README.md &&
+      test -f docs/verification.md; a fresh-clone reader can run
+      app/testme.sh and reproduce exact binomial hand-answer checks
+      and the three dataset demonstrations from documentation.
     result: ""
 
   - id: H-08
-    title: Reproducible public repo and Devpost submission
-    points: "5 - Tool Documentation: reproducible public GitHub repository"
+    title: Verify reproducible public repo and submit on Devpost
+    points: "5 - Tool Documentation: public reproducible GitHub repository"
     status: todo
     owner: ""
     started_at: ""
     owns: [".gitignore"]
     notes: >
-      Confirm team, track and exact Devpost prompt, then submit repository
-      and independently verified public URL. Confirm a fresh clone starts
-      the app and tests pass. Check .gitignore and absence of real tokens.
-      Never mark submitted before a real Devpost confirmation.
+      Confirm the previously unknown team name and exact Devpost prompt
+      number in SPEC through the H-01 owner. Verify on-campus deadline,
+      public repository, live demonstration and fresh-clone tests.
+      Check .gitignore and absence of secrets; never falsely claim
+      a submission or live service before verifying it.
     definition_of_done: >
-      A fresh clone runs app/testme.sh and python -m pytest tests -q
-      successfully; the repo is public, no credentials are committed,
-      and the Devpost entry links the repo and verified deployment.
+      Fresh clone runs app/testme.sh and python -m pytest -q;
+      public repository contains reproducible code and no credentials,
+      Devpost submission references the repository and verified
+      public Posit Connect URL; record the actual confirmation.
     result: ""
