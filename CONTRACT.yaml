@@ -45,9 +45,9 @@ tasks:
   - id: H-02
     title: Three reproducible rush-hour CSV datasets and codebook
     points: "10 - Tool Documentation: 2-3 working test datasets (5), codebook (5)"
-    status: todo
-    owner: ""
-    started_at: ""
+    status: done
+    owner: "Mohammed Albarrak"
+    started_at: "2026-10-17 00:41"
     owns: ["data/", "app/data_loader.py", "tests/test_loader.py", "tests/test_data.py"]
     notes: >
       Create stable.csv, planted_events.csv, edge_case.csv and data/README.md
@@ -70,7 +70,7 @@ tasks:
       seeded reproducibility, planted signals and missing-snapshot case.
       app/data_loader.py rejects invalid row counts and duplicates with row
       numbers and filters weekdays/rush windows; its tests pass here.
-    result: ""
+    result: "seeded data/generate.py writes stable.csv and planted_events.csv (7,200 rows each) and edge_case.csv (1,432), with codebook data/README.md and app/data_loader.py; definition_of_done printed 47 passed and all four files exist"
 
   - id: H-03
     title: Core QC statistic as one plain, tested function
