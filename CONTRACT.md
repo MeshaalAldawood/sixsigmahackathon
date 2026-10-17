@@ -89,7 +89,7 @@
 
 **Points:** 25 - Working-tool implementation (maintenance portion)
 
-**Status:** `in_progress`
+**Status:** `done`
 
 **Owner:** `Claude (overnight coordinator)`
 
@@ -101,7 +101,7 @@
 
 **Definition of done:** python -m pytest tests/test_maintenance.py -q && test -f docs/maintenance.md; tests cover 07:00 aggregation, no duplicate counting, exact binomial flags, changing broken share, zero denominator, station ordering and ties.
 
-**Result:** `—`
+**Result:** `app/maintenance.py build_maintenance exact-07:00 network p-chart (n=200, limits 8-34) and ranked broken-bike list, docs/maintenance.md; DoD printed 15 passed, exit 0; independent review OVERALL PASS, planted flags exactly 09-30, 10-01, 10-02`
 
 ### H-04 — Complete FastAPI backend and pass hard backend test gate
 
