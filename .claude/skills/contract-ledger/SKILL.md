@@ -33,7 +33,7 @@ Modify files listed under this task's **Owns** only (besides its own section of 
 
 1. Run the task's **Definition of done** as written. Quote the real output; if it fails, leave the task in progress or blocked.
 2. Change only `**Status:** \`done\`` and `**Result:** \`one-line verified outcome\`` in the selected task section; preserve all other fields.
-3. Stage explicit owned paths and ledger together, for example: `git add app/qc.py tests/test_qc.py docs/statistics.md CONTRACT.md`, then commit only after the human approves the diff. No automatic pushes.
+3. Stage explicit owned paths and ledger together, for example: `git add app/qc.py tests/test_qc.py docs/statistics.md CONTRACT.md`, then commit only after the human approves the diff **or** has already granted scoped standing YES for this one-shot run. In standing-approval mode the orchestrator still logs and inspects the diff and must pass the task's tests/review before committing; pushing and merging are limited to the exact branches permitted in the invoking prompt. Never bypass host prompts, protections or secret-handling rules.
 4. To inspect ledger structure and task states run `bash .claude/skills/superagent/scripts/check.sh`. **Do not use a YAML parser.**
 
 ## Invariants

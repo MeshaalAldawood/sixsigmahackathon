@@ -23,11 +23,11 @@
 
 **Started at:** `—`
 
-**Owns:** `SPEC.md`, `docs/plan.md`
+**Owns:** `SPEC.md`, `docs/plan.md`, `docs/architecture.md`, `docs/AUTONOMOUS_BUILD_PROMPT.md`, `.claude/skills/superagent/SKILL.md`, `.claude/skills/contract-ledger/SKILL.md`
 
-**Notes:** The uploaded SPEC is the finalized product contract; preserve its full nine-section template. Align docs/plan.md with exact binomial p-charts, AM/PM station windows, maintenance at 07:00, fixed 0.10 target, three datasets, one FastAPI plus React deployment, and backend-first sequencing. Only team name and official Devpost prompt number remain to confirm; do not guess them or block initial code on these metadata blanks.
+**Notes:** The uploaded SPEC is the finalized product contract; preserve its full nine-section template. Align docs/plan.md with exact binomial p-charts, AM/PM station windows, maintenance at 07:00, fixed 0.10 target, three datasets, one FastAPI plus React deployment, and backend-first sequencing. Record all pre-decided engineering choices, JSON interfaces, UI design and rubric gates in docs/architecture.md, and the scoped one-run coordinator instructions in docs/AUTONOMOUS_BUILD_PROMPT.md. Creating these planning docs does not mean implementation is complete. Update the two Superagent/contract-ledger skills solely to support scoped advance authorization for unattended execution, without weakening verification or permissions. Only team name and official Devpost prompt number remain to confirm; do not guess them or block initial code on these metadata blanks.
 
-**Definition of done:** test -f docs/plan.md && grep -q "exact binomial" docs/plan.md && grep -q "planted_events.csv" SPEC.md && grep -q "edge_case.csv" SPEC.md; team has reviewed this finalized scope.
+**Definition of done:** test -f docs/plan.md && test -f docs/architecture.md && test -f docs/AUTONOMOUS_BUILD_PROMPT.md && grep -q "exact binomial" docs/architecture.md && grep -q "planted_events.csv" SPEC.md && grep -q "edge_case.csv" SPEC.md; team has reviewed this finalized scope.
 
 **Result:** `—`
 
