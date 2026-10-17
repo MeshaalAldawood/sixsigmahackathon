@@ -19,6 +19,14 @@ here through `AGENTS.md`: when the user types "/superagent" or "superagent", rea
 
 ## 0. When invoked
 
+**Project-specific one-shot mode:** When the user explicitly pastes the master prompt from
+`docs/AUTONOMOUS_BUILD_PROMPT.md`, follow the **frozen** implementation choices in
+`docs/architecture.md`, the dependency gates in `docs/plan.md`, and the scope in
+`SPEC.md`. Do not repeat discovery, question rounds, or overwrite the approved plan.
+This is still one coordinator: delegate disjoint tasks to Codex/Claude workers in
+**separate worktrees**, and require real tests and independent review before merges.
+The user may grant scoped **advance YES** in their run prompt; see Human-approval mode below.
+
 Do these in order, without being asked. `$ARGUMENTS` (or whatever the user typed after
 "superagent") is the team's description of their app; it may be blank.
 
@@ -29,10 +37,12 @@ Do these in order, without being asked. `$ARGUMENTS` (or whatever the user typed
    (Context7), or the team wants a UI polish (impeccable) or animation (motion.dev), ask ONE
    question: "Set up the recommended tools now? (about 5 minutes)". On yes, follow
    `.claude/skills/superagent/setup.md`. On no, carry on and do not ask again this session.
+   **One-shot exception:** never pause for optional tools: use what exists, skip optional setup and record any missing browser/CLI verification.
 3. **Fill SPEC.md.** If `SPEC.md` still has `FILL IN` lines, write them from the team's
    description, following the rules in `.opencode/commands/spec.md` (steps 2-5). Never invent the
    team name, the track, the chosen prompt or the repo URL: ask. Work the known-answer numbers out
    by hand, in the chat, with the arithmetic shown. Show `git diff SPEC.md`.
+   **One-shot exception:** finalized Bikeshare SPEC has only unresolved team-name/prompt-number metadata; do not rewrite its technical content or block coding on this metadata. Request verified facts only when submission genuinely needs them.
 4. **Say where they are, in plain words.** What is done, and the next 3-6 CONTRACT tasks with their
    ids and one line each. Tasks run in the explicit CONTRACT.md document order (including H-09/H-10 before H-04), except: make the public
    repo (the first half of H-08) as soon as H-04 works, so H-06 can deploy early.
@@ -44,11 +54,13 @@ Do these in order, without being asked. `$ARGUMENTS` (or whatever the user typed
    - OpenCode: the `question` tool, or a numbered list.
    - Any other agent: a numbered list the team answers in one line, like "1-1, 2-3, 3-1".
    Never decide an open question silently. If nothing is open, say so and go on.
+   **One-shot exception:** the user explicitly approved the scored decisions in `docs/architecture.md` by running its master prompt; those choices are NOT open, so proceed without asking.
 6. **Write `docs/plan.md`** following `.opencode/commands/plan.md` (steps 4-6, under 60 lines):
    tasks mapped to real H-ids (never invent one), each with its `owns` paths, its known-answer test
    AND degenerate test, and every statistic's formula written out. Statistics first, then the tool,
    then the page. Add a Decisions section with the answers from step 5.
-7. **Roll, one CONTRACT task at a time.** For each task:
+   **One-shot exception:** if the frozen `docs/plan.md` and `docs/architecture.md` exist, do not regenerate them; read and execute.
+7. **Roll, one CONTRACT task per worker/worktree at a time.** Parallel work is allowed only for explicitly independent tasks in disjoint worktrees, as specified by the architecture. The coordinator itself is unique. For each task:
    - **Build:** hand it to the `implementer` subagent BY NAME, never a generic one (Claude Code:
      the Agent/Task tool with `subagent_type: "implementer"`, defined in `.claude/agents/implementer.md`;
      OpenCode: `.opencode/agents/implementer.md`) with the charter in section 7. With no subagents,
@@ -59,7 +71,7 @@ Do these in order, without being asked. `$ARGUMENTS` (or whatever the user typed
      runs `.opencode/commands/review.md` in a NEW session. No PASS table, no check-in.
    - **Check in:** follow `.opencode/commands/checkin.md`. Run the `definition_of_done` exactly as
      written and paste its output.
-   - **Deploy early:** H-06 as soon as H-04 runs locally. A live URL by mid-event leaves time to fix.
+   - **Deploy early:** prepare H-06 packaging as soon as H-04 runs locally; final React deployment must wait until H-05's frontend is built and integrated.
    - After each task, run `check.sh` again and say what is next.
 
    **Human-approval mode:** by default stop before a commit/push and wait for "yes". When the
