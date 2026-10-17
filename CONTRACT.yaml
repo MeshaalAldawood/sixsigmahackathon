@@ -43,16 +43,33 @@ tasks:
     result: ""
 
   - id: H-02
-    title: Two or three test datasets plus a codebook
-    points: "10 - Tool Documentation: 2-3 working test datasets (5), codebook and README for the data (5)"
+    title: Three reproducible rush-hour CSV datasets and codebook
+    points: "10 - Tool Documentation: 2-3 working test datasets (5), codebook (5)"
     status: todo
     owner: ""
     started_at: ""
-    owns: ["data/"]
+    owns: ["data/", "app/data_loader.py", "tests/test_loader.py", "tests/test_data.py"]
+    notes: >
+      Create stable.csv, planted_events.csv, edge_case.csv and data/README.md
+      with a recorded random seed and generation method. EXACT input columns:
+      timestamp,station_id,num_bikes_available,num_bikes_disabled,
+      num_docks_available. Normal/event datasets: 10 stations x 15 weekdays
+      x 48 five-minute snapshots (24 AM 07:00-08:55 and 24 PM 16:00-17:55);
+      first 10 weekdays are the shared baseline. Edge dataset: 2 stations x
+      15 weekdays with one always-usable station and missing snapshots.
+      Plant: day-12 PM stadium full-station anomaly, broken-bike share
+      doubles starting day 13. Include residential/downtown opposing rush
+      patterns, chronic hilltop above 0.10 but in control, stable broken share.
+      Never represent synthetic values as real observations. Codebook documents
+      units, seed, expected flags, stable false-alert count and GBFS logging.
     definition_of_done: >
-      ls data/*.csv lists 2 or 3 files (e.g. in control, planted shift, edge
-      case), and data/README.md names every one of them and describes every
-      column with units and how the data would be collected for real.
+      python -m pytest tests/test_data.py tests/test_loader.py -q &&
+      test -f data/stable.csv && test -f data/planted_events.csv &&
+      test -f data/edge_case.csv && test -f data/README.md;
+      tests prove file schemas, checkpoint counts, shared baseline,
+      seeded reproducibility, planted signals and missing-snapshot case.
+      app/data_loader.py rejects invalid row counts and duplicates with row
+      numbers and filters weekdays/rush windows; its tests pass here.
     result: ""
 
   - id: H-03
