@@ -125,11 +125,11 @@
 
 **Points:** 10 - Tool Design: clear demonstration on three test datasets
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:22`
 
 **Owns:** `app/frontend/`, `app/static/`, `tests/test_static.py`, `docs/integration.md`, `demo/README.md`
 
@@ -137,7 +137,7 @@
 
 **Definition of done:** npm --prefix app/frontend run build && python -m pytest tests/test_static.py -q && python -m pytest -q; one local FastAPI origin renders a built React page, three datasets, AM/PM station and maintenance charts, recommended actions and warning states; demo/README.md walks through all three examples with actual observed results.
 
-**Result:** `—`
+**Result:** `React page in app/frontend built to app/static and served by FastAPI on one origin, docs/integration.md, demo/README.md with observed results; DoD: build ok, test_static 10 passed, full suite 152 passed, exit 0; browser-checked 3 datasets, AM/PM, S08 day-12 red point, maintenance flags, E01 no-limits state`
 
 ### H-06 — Deploy one bundled FastAPI and React app to Posit Connect
 
