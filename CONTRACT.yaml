@@ -175,8 +175,9 @@ tasks:
       Start React/Vite ONLY after H-06 is done. One page, data selector, two
       tabs, chart and priority table per tab, warning states and visible
       synthetic-data label. Get all statistics and decisions from JSON.
-      Use relative /api URLs, not a separately deployed service. Configure
-      build output to app/static; write app/frontend/README.md during the task.
+      Use relative /api URLs, not a separately deployed service. Build output
+      stays in app/frontend/dist; H-08 copies it into app/static. Write
+      app/frontend/README.md during the task.
     definition_of_done: >
       npm --prefix app/frontend run build exits 0 and a local preview can
       display both report types with no browser-side p-chart calculations;
@@ -194,7 +195,7 @@ tasks:
     owns: ["app/static/", "tests/test_static.py", "docs/integration.md"]
     points: "25 - working tool; 10 - clear demonstration"
     notes: >
-      Build React into app/static and verify existing app/app.py mounts it.
+      Copy built app/frontend/dist into app/static and verify app/app.py mounts it.
       A single local URL serves HTML and both JSON endpoints. Do not edit
       frontend or backend files owned by other tasks; report any necessary
       interface change to both developers before reassignment. Write
