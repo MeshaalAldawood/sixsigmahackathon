@@ -47,7 +47,7 @@ commands in OpenCode ([`.opencode/commands/`](.opencode/commands/)); elsewhere, 
 | `/decide` | by hand: a design choice is open | one multiple-choice question at a time, then a Decisions section in `docs/plan.md` |
 | `/build H-03` | by hand: ONE CONTRACT task | that task built inside its files, with the real test and `definition_of_done` output |
 | `/review H-03` | by hand: before you trust any statistic | a PASS/FAIL table: known answer and degenerate case, with numbers |
-| `/checkin H-03` | by hand: build and review passed, a teammate read the diff | `status: done` + a one-line `result`; commits only after a yes |
+| `/checkin H-03` | by hand: build and review passed, a teammate read the diff | **Status:** `done` + a one-line **Result**; commits only after a yes |
 | `/stuck <error>` | by hand: a 429 or quota error, a silent hang, the same error three times | the problem in one sentence and ONE next step |
 
 ## Hard rules
