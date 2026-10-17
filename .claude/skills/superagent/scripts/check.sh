@@ -87,7 +87,7 @@ else echo "FAIL  .claude/skills/superagent/SKILL.md missing"; fail=1; fi
 # 5. Closed-loop gate for a team that has started.
 if [ "$team" -eq 1 ]; then
   if [ "$ndone" -ge 1 ]; then echo "ok    --team: $ndone task(s) checked in as done"
-  else echo "FAIL  --team: no task is done yet. Run a task's definition_of_done, then set status: done and a one-line result"; fail=1; fi
+  else echo "FAIL  --team: no task is done yet. Run a task's definition_of_done, then set **Status:** `done` and a one-line **Result**"; fail=1; fi
 fi
 
 # 6. One line: what to do next.
