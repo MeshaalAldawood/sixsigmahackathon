@@ -17,11 +17,11 @@
 
 **Points:** 15 - Tool Design: prompt alignment (5), clear user/decision (5), minimal inputs (5)
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Codex + Team Six`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 00:38`
 
 **Owns:** `SPEC.md`, `docs/plan.md`
 
@@ -29,7 +29,7 @@
 
 **Definition of done:** test -f docs/plan.md && grep -q "exact binomial" docs/plan.md && grep -q "planted_events.csv" SPEC.md && grep -q "edge_case.csv" SPEC.md; team has reviewed this finalized scope.
 
-**Result:** `—`
+**Result:** `Team Six spec and reviewed 56-line execution plan approved for push; H-01 file checks passed, all 10 tasks and 38 ownership entries covered; official prompt number remains a metadata follow-up.`
 
 ### H-02 — Three reproducible rush-hour CSV datasets and codebook
 

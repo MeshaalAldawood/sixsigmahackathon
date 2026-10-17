@@ -11,7 +11,7 @@ The examples after each `FILL IN` show the shape of an answer. They are not hint
 Implement **only** what is written here. All data is synthetic and labelled as such.
 
 ## 1. Team and prompt
-- **Team name:** FILL IN. Example: "Control Freaks"
+- **Team name:** Team Six
 - **Track:** On-campus (24 hours). Submissions due Sat Oct 17, 1 PM ET; showcase 2-3 PM.
 - **Prompt we chose:** Urban Systems: "Bikeshare Fleets" (prompt number: copy it from Devpost). A municipal bikeshare system has a "docks full / docks empty" crisis at rush hour and maintenance vans are dispatched blindly; design a tool to track dock availability, when and where stations are unusable, and support the network's performance.
 - **Our public repo:** github.com/MeshaalAldawood/sixsigmahackathon
