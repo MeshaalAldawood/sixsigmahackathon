@@ -1,6 +1,6 @@
 # CLAUDE.md - Six Sigma Hackathon
 
-**Type `/superagent` and describe your app.** It reads `SPEC.md` and `CONTRACT.yaml`, then routes to
+**Type `/superagent` and describe your app.** It reads `SPEC.md` and `CONTRACT.md`, then routes to
 every skill and template it needs; you never need to name a skill.
 
 You are the coding agent for a Six Sigma Hackathon team. This repo is ready to go: the team cloned
@@ -13,13 +13,13 @@ Contents: [Start here](#start-here-every-session) | [Which skill](#which-skill-w
 
 ## Start here, every session
 
-1. **Read [`SPEC.md`](SPEC.md) and [`CONTRACT.yaml`](CONTRACT.yaml) before anything else.** SPEC says
+1. **Read [`SPEC.md`](SPEC.md) and [`CONTRACT.md`](CONTRACT.md) before anything else.** SPEC says
    what the tool is; CONTRACT is the task ledger. Both are pre-filled for this event.
 2. **If SPEC.md still has `FILL IN` lines, fill them first** (task H-01). Ask, don't guess: the team,
    the prompt they picked, the user, the statistic, the stack. Prompts are revealed at kickoff on
    Devpost ([`docs/prompts.md`](docs/prompts.md)); never invent one.
-3. **Work one CONTRACT task at a time.** Check it out (`status: in_progress`, `owner`, `started_at`),
-   write only inside its `owns` paths, check it in (`status: done` + a one-line `result`) in the same
+3. **Work one CONTRACT task at a time.** Check it out (`**Status:** `in_progress``, **Owner**, **Started at**),
+   write only inside its `owns` paths, check it in (`**Status:** `done`` + a one-line **Result**) in the same
    commit as the work. Nothing gets built that is not a task; propose one and wait for a yes.
 4. **Never claim done without running the task's `definition_of_done`.** Quote what it printed.
 
@@ -66,7 +66,7 @@ on-campus sprint** and a **7-day Virtual DL Challenge** ([`README.md`](README.md
 [`docs/schedule.md`](docs/schedule.md)). The team picks one prompt, invents the data, and ships a
 working quality-control tool.
 
-Judging uses the 100-point rubric in [`docs/criteria.md`](docs/criteria.md); the eight CONTRACT tasks
+Judging uses the 100-point rubric in [`docs/criteria.md`](docs/criteria.md); the CONTRACT tasks
 cover all of it. A plain page around a correct capability analysis beats a gorgeous dashboard around
 a wrong control chart. Ship **one** of: an R package or Python library, a public REST API (FastAPI
 or plumber), or a dashboard (React or Shiny). Any AI agent is welcome; the skill judged is steering
@@ -75,7 +75,7 @@ it toward statistically correct work. Cite what you borrow.
 ## Repo map
 
 ```
-SPEC.md, CONTRACT.yaml   your project's spec and task ledger (pre-filled; read first)
+SPEC.md, CONTRACT.md   your project's spec and task ledger (pre-filled; read first)
 CLAUDE.md, AGENTS.md     this file, and its mirror
 README.md                the event front door (becomes your tool's README in H-07)
 docs/                    criteria (the rubric), prompts (at kickoff), schedule, resources,
