@@ -1,0 +1,77 @@
+{
+  "version": 1,
+  "locale": "C.UTF-8",
+  "metadata": {
+    "appmode": "python-fastapi",
+    "entrypoint": "app:app"
+  },
+  "python": {
+    "version": "3.12.14",
+    "package_manager": {
+      "name": "pip",
+      "version": "25.0.1",
+      "package_file": "requirements.txt"
+    }
+  },
+  "environment": {
+    "python": {
+      "requires": "~=3.12.0"
+    }
+  },
+  "files": {
+    "requirements.txt": {
+      "checksum": "72a1e166dc92037bfd1fa275ee48bd06"
+    },
+    ".python-version": {
+      "checksum": "61939823fbcc7e8de3b61ab105331baf"
+    },
+    "README.md": {
+      "checksum": "73fb5eda40411719787979d92c0ea1fd"
+    },
+    "__init__.py": {
+      "checksum": "daa9c4b50ed824f74019a5f4e6d0a358"
+    },
+    "app.py": {
+      "checksum": "f7468dd1d3302f6728642a30162185d0"
+    },
+    "availability.py": {
+      "checksum": "3bf91ae64919ef6f51263ed97c79f2b7"
+    },
+    "data/edge_case.csv": {
+      "checksum": "1d9ebd01b60c5fa09fa75d53ea1f4f7b"
+    },
+    "data/planted_events.csv": {
+      "checksum": "8bf8f520e97a636e9cea0dbab4453d9b"
+    },
+    "data/stable.csv": {
+      "checksum": "ee69c27bba07bf25b77b3c917822be62"
+    },
+    "data_loader.py": {
+      "checksum": "5f5527d0eee68ecc15ebcba8dc5a4bef"
+    },
+    "deployme.sh": {
+      "checksum": "6b08ab46ff73816beefef7ef953c760a"
+    },
+    "maintenance.py": {
+      "checksum": "488620cffbcb91e5ae513e817148248f"
+    },
+    "manifestme.sh": {
+      "checksum": "96a9c6d5cb2c3bbadb51a199bfd4e4d7"
+    },
+    "qc.py": {
+      "checksum": "c442c56ced87e710203df05631551783"
+    },
+    "static/assets/index-CVcto2ms.css": {
+      "checksum": "9b6a984b7a424509e77f2e6cf2623ec1"
+    },
+    "static/assets/index-mQENQgXj.js": {
+      "checksum": "a3d1811f4be36271558154d5dc8b8c1e"
+    },
+    "static/index.html": {
+      "checksum": "2c4d1aba8007d93240c6917e06e1ef61"
+    },
+    "testme.sh": {
+      "checksum": "a77d118d2ac726b0b077b698edb84505"
+    }
+  }
+}

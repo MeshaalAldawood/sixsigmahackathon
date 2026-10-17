@@ -143,11 +143,11 @@
 
 **Points:** Protects 25 working-tool points - public app required
 
-**Status:** `todo`
+**Status:** `blocked`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:28`
 
 **Owns:** `app/data/`, `app/manifest.json`, `.github/workflows/`, `.github/scripts/`, `docs/deployment.md`
 
@@ -155,7 +155,7 @@
 
 **Definition of done:** A public Posit Connect URL, visited logged out, serves the React page and all three whitelisted reports with HTTP 200; deployment docs contain actual test commands/results and URL, and app/data/ contains the exact three approved CSVs.
 
-**Result:** `—`
+**Result:** `BLOCKED on course Connect publisher credentials (none on this machine; deployme.sh exited 1). Prepared: app/data byte-identical CSVs, app/manifest.json (python-fastapi, app:app, 3.12.14), .github workflow with APP_DIR app; the 18-file bundle ran alone and returned 200 for / and all 3 reports. No public URL yet; steps in docs/deployment.md`
 
 ### H-07 — Audit incremental documentation and reproducibility
 
