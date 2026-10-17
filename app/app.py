@@ -35,6 +35,26 @@ def _dataset_path(name: str) -> Path:
     raise HTTPException(status_code=503, detail=f"Bundled dataset {name} is unavailable")
 
 
+_RECORDS_CACHE: dict[tuple, list[dict]] = {}
+
+
+def _load_records(name: str) -> list[dict]:
+    """Load and validate a bundled CSV once; reload only if the file changes.
+
+    The key includes the loader, so a replaced loader (as in tests) is always called.
+    Callers receive a fresh list and never modify the record dicts.
+    """
+    path = _dataset_path(name)
+    stat = path.stat()
+    key = (load_station_status, str(path), stat.st_mtime_ns, stat.st_size)
+    if key not in _RECORDS_CACHE:
+        records = load_station_status(path)
+        for stale in [old for old in _RECORDS_CACHE if old[1] == key[1]]:
+            del _RECORDS_CACHE[stale]
+        _RECORDS_CACHE[key] = records
+    return list(_RECORDS_CACHE[key])
+
+
 @app.get("/api/datasets")
 def datasets() -> dict:
     """List approved synthetic datasets; names are never treated as paths."""
@@ -45,7 +65,7 @@ def datasets() -> dict:
 def replay_clock_endpoint(dataset: str) -> dict:
     """Expose synthetic navigation times before requesting measured reports."""
     try:
-        records = load_station_status(_dataset_path(dataset))
+        records = _load_records(dataset)
         return {"dataset": dataset, "synthetic": True, **replay_clock(records)}
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error
@@ -55,7 +75,7 @@ def replay_clock_endpoint(dataset: str) -> dict:
 def report(dataset: str, as_of: str | None = None) -> dict:
     """Produce both rush-window charts and the network maintenance chart."""
     try:
-        records = load_station_status(_dataset_path(dataset))
+        records = _load_records(dataset)
         replay = prepare_replay(records, parse_as_of(as_of))
     except ValueError as error:
         raise HTTPException(status_code=422, detail=str(error)) from error

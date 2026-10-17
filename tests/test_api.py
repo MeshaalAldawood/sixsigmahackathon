@@ -100,3 +100,20 @@ def test_imports_from_root_and_app_working_directories():
         )
         assert result.returncode == 0, result.stderr
         assert "Bikeshare Fleet Quality Control" in result.stdout
+
+
+def test_cached_records_match_a_fresh_load_and_reload_when_the_file_changes(tmp_path, monkeypatch):
+    for name in api_module.DATASETS:
+        assert api_module._load_records(name) == api_module.load_station_status(api_module._dataset_path(name))
+    first = client.get("/api/report", params={"dataset": "stable", "as_of": "2026-10-20T08:55"}).json()
+    again = client.get("/api/report", params={"dataset": "stable", "as_of": "2026-10-20T08:55"}).json()
+    assert first == again
+
+    source = api_module._dataset_path("edge_case").read_text(encoding="utf-8")
+    copy = tmp_path / "edge_case.csv"
+    copy.write_text(source, encoding="utf-8")
+    monkeypatch.setattr(api_module, "_dataset_path", lambda _name: copy)
+    before = len(api_module._load_records("edge_case"))
+    lines = source.splitlines(keepends=True)
+    copy.write_text("".join(lines[:-1]), encoding="utf-8")  # drop the last snapshot row
+    assert len(api_module._load_records("edge_case")) == before - 1
