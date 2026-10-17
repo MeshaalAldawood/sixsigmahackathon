@@ -84,6 +84,15 @@ svg text { fill: #5b6c70; }
 .provisional-note { padding: 12px 16px; background: #fff3dd; color: #684519; border-radius: 7px; }
 .badge.caution { background: #fff0d4; color: #724817; }
 .badge.neutral { background: #e5eaeb; color: #405457; }
+.verdict { display: flex; flex-wrap: wrap; align-items: baseline; gap: 6px 18px; margin: 0 0 16px; padding: 14px 18px; border: 1px solid #cfe2da; border-radius: 10px; background: #eef6f2; color: #1d5e50; font-size: .9rem; }
+.verdict strong { font-size: 1rem; margin-right: 4px; }
+.verdict span { color: #3d5a55; }
+.verdict span + span::before { content: "·"; margin-right: 18px; color: #8aa59f; }
+.verdict.bad { background: #fbeae6; border-color: #efc4bb; color: #8f2c26; }
+.verdict.bad span { color: #6e3a35; }
+.verdict.caution { background: #fff5e2; border-color: #ecd9a6; color: #684519; }
+.verdict.caution span { color: #684519; }
+.verdict.neutral { background: #eef1f1; border-color: #d6dfdf; color: #3c5053; }
 .status-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
 .status-row { padding: 13px 20px; border-bottom: 1px solid #e3ebe9; display: grid; grid-template-columns: minmax(100px, 1fr) auto; gap: 4px 12px; align-items: center; font-size: .88rem; min-width: 0; }
 .status-row > span:nth-child(3), .status-row small { grid-column: 1 / -1; }

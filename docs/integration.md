@@ -30,6 +30,15 @@ offers jumps to the synthetic stadium and broken-bike events. The speed is a
 minimum delay between completed report requests, so slow requests do not cause
 the display to skip observations.
 
+Each report section opens with a one-line verdict built only by counting backend
+fields: out-of-control station IDs and action counts for the rush window
+(withheld while it is provisional), and for maintenance the latest 07:00 point
+against its UCL plus the first three stations in the backend's inspection order.
+The event jumps also open the view where the event shows: the stadium jump
+selects PM and `stadium_01`, the broken-bike jump opens Maintenance. While the
+replay steps, the previous report stays on screen (`aria-busy` marks the update)
+and the clock is not announced during playback.
+
 Availability points and dispatch rows use the backend's `provisional` flag.
 The current station list shows the last observed counts, their timestamp and
 age, plus stale or missing state. The maintenance heading shows exact 07:00
