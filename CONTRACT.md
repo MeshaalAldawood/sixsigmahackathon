@@ -107,11 +107,11 @@
 
 **Points:** 25 - Tool Implementation: effective, working REST API
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:21`
 
 **Owns:** `app/app.py`, `app/__init__.py`, `app/testme.sh`, `app/manifestme.sh`, `app/deployme.sh`, `app/.python-version`, `app/README.md`, `tests/test_api.py`, `docs/api.md`
 
@@ -119,7 +119,7 @@
 
 **Definition of done:** python -m pytest tests/test_data.py tests/test_qc.py tests/test_availability.py tests/test_maintenance.py tests/test_loader.py tests/test_api.py -q exits 0; test -f app/testme.sh && test -f app/manifestme.sh && test -f app/deployme.sh && test -f app/README.md && test -f docs/api.md; verify both API endpoints with stable, planted_events, edge_case and invalid-name requests and startup from both the repo root and app/ directory.
 
-**Result:** `—`
+**Result:** `app/app.py FastAPI GET /api/datasets and /api/report over the 3 whitelisted CSVs plus four-script contract, app/README.md, docs/api.md; backend gate printed 142 passed, exit 0; real servers from repo root and app/ answered all 3 reports, 400 for ../SPEC.md, 422 for missing name; testme.sh served HTTP 200`
 
 ### H-05 — Minimal React frontend after backend gate and demo walk-through
 
