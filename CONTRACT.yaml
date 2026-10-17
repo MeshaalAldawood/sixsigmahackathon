@@ -48,7 +48,7 @@ tasks:
     status: todo
     owner: ""
     started_at: ""
-    owns: ["data/", "tests/test_data.py"]
+    owns: ["data/", "app/data_loader.py", "tests/test_loader.py", "tests/test_data.py"]
     notes: >
       Create stable.csv, planted_events.csv, edge_case.csv and data/README.md
       with a recorded random seed and generation method. EXACT input columns:
@@ -63,11 +63,13 @@ tasks:
       Never represent synthetic values as real observations. Codebook documents
       units, seed, expected flags, stable false-alert count and GBFS logging.
     definition_of_done: >
-      python -m pytest tests/test_data.py -q &&
+      python -m pytest tests/test_data.py tests/test_loader.py -q &&
       test -f data/stable.csv && test -f data/planted_events.csv &&
       test -f data/edge_case.csv && test -f data/README.md;
       tests prove file schemas, checkpoint counts, shared baseline,
       seeded reproducibility, planted signals and missing-snapshot case.
+      app/data_loader.py rejects invalid row counts and duplicates with row
+      numbers and filters weekdays/rush windows; its tests pass here.
     result: ""
 
   - id: H-03
@@ -156,10 +158,11 @@ tasks:
     status: todo
     owner: ""
     started_at: ""
-    owns: ["app/app.py", "app/data_loader.py", "app/__init__.py", "app/testme.sh", "app/manifestme.sh", "app/deployme.sh", "app/.python-version", "app/README.md", "tests/test_api.py", "tests/test_loader.py", "docs/api.md"]
+    owns: ["app/app.py", "app/__init__.py", "app/testme.sh", "app/manifestme.sh", "app/deployme.sh", "app/.python-version", "app/README.md", "tests/test_api.py", "docs/api.md"]
     notes: >
       Start after H-02, H-03, H-09 and H-10 are implemented and verified.
-      Copy/adapt demos/fastapi (preserve its four-script contract).
+      Use the validated app/data_loader.py from H-02. Copy/adapt
+      demos/fastapi (preserve its four-script contract).
       Reject invalid source records naming row number; ignore weekends
       and outside-window snapshots, tolerate missing observations.
       Serve GET /api/datasets (three whitelisted CSVs) and
