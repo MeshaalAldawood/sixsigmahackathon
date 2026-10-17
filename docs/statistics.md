@@ -37,9 +37,9 @@ The tails come from `scipy.stats.binom`: `P(X > k)` is `binom.sf(k, n, p_bar)` a
 ### Why exact limits, not the usual formula
 
 The textbook limits `p_bar +/- 3 sqrt(p_bar (1 - p_bar) / n)` lean on a normal approximation
-that needs roughly `n * p_bar >= 5`. One station's rush window has `n = 24` snapshots and
-`p_bar` around 0.02-0.15, so `n * p_bar` is about 0.5-4: the normal limits would sit in the
-wrong place. Exact binomial limits need no such condition. The known answer below shows a case
+that needs roughly `n * p_bar >= 5`. One station's rush window has `n = 24` snapshots, so
+`n * p_bar` is usually below 5 (from 0.3 to 6.3 across the demo data's stations): the normal limits
+would sit in the wrong place. Exact binomial limits need no such condition. The known answer below shows a case
 where the two disagree.
 
 ## What comes out

@@ -161,7 +161,7 @@
 
 **Points:** 10 - Tool Documentation: complete user and function documentation
 
-**Status:** `in_progress`
+**Status:** `done`
 
 **Owner:** `Claude (overnight coordinator); independent auditor subagent`
 
@@ -173,7 +173,7 @@
 
 **Definition of done:** python -m pytest -q passes and test -f README.md && test -f docs/verification.md; a fresh-clone reader can run app/testme.sh and reproduce exact binomial hand-answer checks and the three dataset demonstrations from documentation.
 
-**Result:** `—`
+**Result:** `Tool README.md replaces the event front page; docs/verification.md records 3 independent reviews; DoD printed 152 passed, exit 0; fresh-clone audit: testme up in 28 s, 152 passed, identical page build, every documented number reproduced; its 3 doc defects fixed (incl. statistics.md n*p_bar wording, returned to H-03 docs)`
 
 ### H-08 — Verify reproducible public repo and submit on Devpost
 
