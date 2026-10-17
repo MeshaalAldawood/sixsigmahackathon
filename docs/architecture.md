@@ -12,21 +12,21 @@ Scores: 1 (poor) to 5 (excellent), **subjective implementation estimates**. Weig
 
 | ID and alternative | Correct (30) | Speed (25) | Safe integration (20) | Deploy (15) | UX (10) | /100 | Decision |
 |---|---:|---:|---:|---:|---:|---:|---|
-| A: One FastAPI service + built React | 5 | 4 | 5 | 4 | 5 | **94** | **Choose** |
-| A: Separate React and API deployments | 5 | 2 | 3 | 2 | 5 | 69 | Reject CORS/multi-deploy |
+| A: One FastAPI service + built React | 5 | 4 | 5 | 4 | 5 | **92** | **Choose** |
+| A: Separate React and API deployments | 5 | 2 | 3 | 2 | 5 | 68 | Reject CORS/multi-deploy |
 | A: Python dashboard only | 3 | 4 | 4 | 4 | 3 | 72 | Reject SPEC mismatch |
-| B: exact binomial + SciPy | 5 | 4 | 5 | 4 | 5 | **93** | **Choose** |
-| B: normal 3-sigma p-chart | 1 | 5 | 5 | 5 | 4 | 71 | Reject small-n error |
+| B: exact binomial + SciPy | 5 | 4 | 5 | 4 | 5 | **92** | **Choose** |
+| B: normal 3-sigma p-chart | 1 | 5 | 5 | 5 | 4 | 74 | Reject small-n error |
 | C: validated loader + two independent domain functions | 5 | 4 | 5 | 5 | 5 | **95** | **Choose** |
 | C: monolithic FastAPI analytics | 3 | 4 | 2 | 5 | 4 | 69 | Reject coupling |
 | D: bundled CSVs (allowlist) | 5 | 5 | 5 | 5 | 4 | **98** | **Choose** |
-| D: database or live GBFS integration | 2 | 1 | 2 | 2 | 4 | 36 | Reject out of scope |
+| D: database or live GBFS integration | 2 | 1 | 2 | 2 | 4 | 39 | Reject out of scope |
 | E: return all station chart series in one JSON report | 5 | 5 | 5 | 4 | 5 | **97** | **Choose** |
-| E: per-station additional endpoints | 3 | 3 | 3 | 4 | 4 | 63 | Reject endpoints creep |
-| F: Recharts + custom CSS tokens | 5 | 4 | 5 | 4 | 5 | **93** | **Choose** |
-| F: handcrafted SVG charts | 4 | 2 | 3 | 5 | 5 | 72 | Reject implementation risk |
-| G: Claude Code orchestrates, Codex builds isolated tasks | 5 | 4 | 5 | 4 | 5 | **93** | **Choose** |
-| G: both agents independently orchestrate one checkout | 2 | 3 | 1 | 4 | 4 | 47 | Reject conflicting edits |
+| E: per-station additional endpoints | 3 | 3 | 3 | 4 | 4 | 65 | Reject endpoints creep |
+| F: Recharts + custom CSS tokens | 5 | 4 | 5 | 4 | 5 | **92** | **Choose** |
+| F: handcrafted SVG charts | 4 | 2 | 3 | 5 | 5 | 71 | Reject implementation risk |
+| G: Claude Code orchestrates, Codex builds isolated tasks | 5 | 4 | 5 | 4 | 5 | **92** | **Choose** |
+| G: both agents independently orchestrate one checkout | 2 | 3 | 1 | 4 | 4 | 51 | Reject conflicting edits |
 
 Further locked choices: **G1** Python `csv` + `datetime` in loader (no DataFrame required), SciPy for exact tails; **G2** pytest+FastAPI TestClient, Vitest for presentation helpers, Playwright if available for visual checks; **G3** React/Vite with a single page and **relative** `/api` calls; **G4** no dependency on paid fonts, APIs, icon kits or hosted image assets; **G5** the only exposed controls are dataset selector, Availability/Maintenance tabs, AM/PM switch and station selector; **G6** light, high-contrast professional operator-console visuals; **G7** preserve `demos/fastapi/` four-script contract, deploy `app/` as one folder; **G8** no browser-side formula or action recomputation; **G9** all tests/reviews and documentation ship with their associated task, not at sprint end.
 
