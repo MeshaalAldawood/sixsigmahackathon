@@ -120,14 +120,17 @@ signal **exploratory**; see [`docs/statistics.md`](../docs/statistics.md).
 
 ## Collecting this data for real
 
-Every GBFS bikeshare system publishes a public `station_status.json` feed (listed in its
-`gbfs.json` discovery file); reading it needs no account or key.
+For a network offering a public GBFS station-status feed, discover its `station_status.json`
+URL through the operator's `gbfs.json` discovery feed. Some operators restrict access or expose
+different field coverage; check the actual operator's feed and permitted polling frequency.
 
 1. Every 5 minutes on weekdays, 07:00-09:00 and 16:00-18:00, a scheduled job (cron, or a
    scheduled Posit Connect job) downloads `station_status.json`.
-2. For each station, write one row: `last_reported` (a Unix epoch time) converted to local time and
-   rounded to the 5-minute mark, then `station_id`, `num_bikes_available`, `num_bikes_disabled` and
-   `num_docks_available` as published.
+2. For each station, write one row with the **actual capture time** converted to the operator's
+   local timezone as `timestamp`, plus `station_id`, `num_bikes_available`, `num_bikes_disabled`
+   and `num_docks_available`. Keep the feed's `last_reported` (when offered) separately in the
+   collector's metadata so delayed/stale observations are not mistaken for current station status.
+   Do not silently infer absent counts or round an old feed update into a fresh observation.
 3. Station capacities are in `station_information.json`. A real feed also has
    `num_docks_disabled`, which this tool does not use.
 4. A missed download is simply a missing row; the tool handles it (n drops for that window).
@@ -135,3 +138,18 @@ Every GBFS bikeshare system publishes a public `station_status.json` feed (liste
    a different problem from an empty or full one.
 
 Two weeks of logging (10 weekdays) is enough to set the first control limits.
+
+## Simulated-live demonstration vs actual operations
+
+The dashboard's optional **SIMULATED LIVE** mode replays the **same three CSV files** above,
+chronologically at their recorded five-minute timestamps. It is **not** connected to a city's
+live stations; pressing Play advances a synthetic clock rather than making GBFS network requests.
+The exact-binomial statistical baseline remains the first 10 historical weekdays; a partial
+rush-hour day is shown as provisional rather than a completed statistical alarm.
+
+To operate continuously in a real deployment, the operator would need an authenticated or
+publicly accessible GBFS feed as permitted, a scheduler to poll and archive each status response,
+timestamp/timezone handling, duplicate/update checks, stale or offline station detection,
+storage and retention of at least 10 known-normal weekdays, and operational review of control
+chart assumptions. These are **real-world data collection requirements**, not services built
+or claimed by this prototype.
