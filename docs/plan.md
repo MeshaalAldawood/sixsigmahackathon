@@ -1,48 +1,51 @@
-# Implementation Plan — Bike-share Two-Hour MVP
+# Build Plan — Finalized Bikeshare Fleets SPEC
 
-**Source of truth:** [SPEC.md](../SPEC.md) defines product behavior. [CONTRACT.yaml](../CONTRACT.yaml) is the **only** task/status ledger. This is the architecture/decision record; do not check tasks in here.
+**Authority:** [SPEC.md](../SPEC.md) is the product contract, [CONTRACT.yaml](../CONTRACT.yaml) is the executable ledger. Follow the task list order in CONTRACT.yaml (H-09/H-10 deliberately precede H-04). This plan records architecture and decisions, not task check-ins.
 
-## Architecture decisions
-| ID | Chosen | Alternatives rejected | Reason |
-|---|---|---|---|
-| A | FastAPI + tiny React/Vite page, one deployed service | Plain HTML; two deployments; Shiny | Meets SPEC; one public URL |
-| B | One framework-free tested Python p-chart function | Duplicated math | Same valid calculation for both analyses |
-| C | Independent availability and maintenance modules | One monolithic module | Separately testable and delegable |
-| D | Two bundled CSVs, identical schema | Database; live API | Reproducible synthetic demo |
-| E | One combined JSON report endpoint | Multiple separate report services | No frontend computation or integration overhead |
-| F | Fixed station action/priority rules | Weighted optimizer / vehicle routing | Transparent and within problem scope |
-
-**Selection criteria:** speed 30%, statistical testability 25%, independent work 20%, deployment risk 10%, SPEC fit 15%. Subjective weighted scores: chosen 92/100; plain HTML 88; two deployments 72; Shiny 70. Not empirical measurements.
-
-## System flow and contracts
-`data/*.csv` -> `app/data_loader.py` (validate) -> **two independent modules** `app/availability.py` and `app/maintenance.py` -> shared `app/qc.py` (p-chart calculation called by each) -> `app/app.py` (FastAPI JSON) -> React page **only after backend verification**.
-
-- Input: one row per station/day; columns `timestamp, station_id, total_docks, working_bikes, broken_bikes`. Derived `empty_docks = total_docks - working_bikes - broken_bikes`; fail on impossible records.
-- Output: `GET /api/datasets` (whitelisted CSV names); `GET /api/report?dataset=stable.csv` returns `{dataset, availability:{chart,stations}, maintenance:{chart,stations}}`.
-- Each chart returns `status` (`ok` or `insufficient_basis`), `p_bar`, daily points (`date, failures, opportunities, p, LCL, UCL, flagged`), and optional warning. Never invent limits if assumptions fail.
-- Station lists: latest snapshot; availability actionable first with deterministic station-ID ties, maintenance sorted broken count descending then ID. UI simply renders backend output.
-- Bundling: keep source data in root `data/`; copy approved CSVs into `app/data/` for deployment. Compile React into `app/static/` and serve through FastAPI. Keep the API functional when static assets are absent.
-
-## Statistical formula, assumptions and tests
-- First 20 checkpoints are the fixed baseline. `p_bar = sum(failures_baseline) / sum(opportunities_baseline)`; daily `p=f/n`.
-- `LCL=max(0, p_bar-3*sqrt(p_bar*(1-p_bar)/n))`; `UCL=min(1, p_bar+3*sqrt(p_bar*(1-p_bar)/n))`.
-- Known answer: 10/100 => `p_bar=.10`; `sqrt(.1*.9/100)=.03`; LCL=.01, UCL=.19; 25/100=.25 => high flag.
-- Tests must reject invalid counts, zero opportunities, invalid baseline/approximation, missing fields and insufficient checkpoints; demonstrate a planted deterioration.
-- These are exploratory p-charts: repeated station/bike observations can be correlated; do not claim calibrated alarms. Document assumptions in `docs/statistics.md`.
-
-## Contract execution — BACKEND FIRST
-| Window | Task IDs | Work and gate |
+## Decision record
+| ID | Choice | Why / rejected alternative |
 |---|---|---|
-| 0–10 min | H-01 | Check SPEC, architecture, known answer and team/prompt TBDs |
-| 10–35 min | H-02, H-03 | In parallel: data/loader + codebook (B); QC function/tests + stats docs (A) |
-| 35–65 min | H-04 | A: availability; B: maintenance; integrator: FastAPI; tests and docs alongside each |
-| 65–75 min | H-04 gate | **All backend tests pass, both datasets load, API returns both reports. No frontend before this.** |
-| 75–105 min | H-05 | React only now; build and integrate one local URL; demo walkthrough written |
-| 105–120 min | H-06, H-07, H-08 | Deploy, README/QA, submission checks; some parallel, external steps may take longer |
+| A | One FastAPI app serves JSON + built React/Vite | One public Posit Connect URL; reject separate frontend deployment |
+| B | One framework-free `app/qc.py` with **exact binomial limits** | Small station-window n makes normal 3-sigma approximation unsuitable |
+| C | Independent `availability.py` / `maintenance.py` | Separate logic and tests; share validated input + QC function |
+| D | Bundled synthetic GBFS-shaped CSVs, no database/feed polling | Repeatable demo with minimal inputs |
+| E | `GET /api/datasets` and `GET /api/report?dataset=<allowlisted name>` | Frontend renders JSON and never re-derives statistics |
+| F | SPEC's first-match dispatch rules + deterministic ties | Explainable, not an optimizer or route planner |
 
-**Work ownership:** A owns QC, availability and React code; B owns datasets/loader and maintenance; integration owner owns API/deployment. Paths and check-ins are governed by `CONTRACT.yaml`, not this table. Every coding task writes its tests and documentation at the same time.
+**Decision criteria used:** 30% speed, 25% correct/testable QC, 20% parallel ownership, 10% deployment risk, 15% SPEC compliance. Earlier indicative scores favored single-deployment FastAPI + React. Do not treat those scores as measured performance.
 
-## Biggest risks
-1. **P-chart assumption failure:** validate simulated baseline, fail clearly and show descriptive station rankings rather than false statistical confidence.
-2. **Time and integration:** finish/tests-pass backend before React; keep one page, one JSON response, no extra features.
-3. **Posit Connect deployment:** verify static assets and bundled CSVs in `app/`; publish early when possible, log actual public URL, never commit credentials.
+## Data and fixed definitions
+- Five CSV columns: `timestamp,station_id,num_bikes_available,num_bikes_disabled,num_docks_available`. Parse local `YYYY-MM-DDTHH:MM`. Validate nonnegative integer counts and unique station/timestamp with clear row number.
+- Weekdays only; AM 07:00–08:55 and PM 16:00–17:55 at five-minute cadence; drop off-window observations, but allow missing snapshots and adjust n.
+- `stable.csv`, `planted_events.csv`: 10 stations x 15 weekdays x 48 snapshots. First 10 weekdays common baseline; event day 12 full PM station; broken share doubles from day 13. `edge_case.csv`: 2 stations x 15 weekdays and missing observations. Include seed/codebook.
+- Availability: per-station, separate AM and PM p-charts; d=count of empty-or-full snapshots, n=logged snapshots. Show empty/full counts individually, baseline median first-empty/full onset time and affected-day frequency, latest-day prioritized station action.
+- Maintenance: daily 07:00 network-level p-chart, d=total disabled bikes, n=total docked bikes. Latest 07:00 station list sorted disabled count desc then station ID. Synthetic/exploratory warning always visible.
+
+## Mathematical specification and tests
+- **Exact binomial p-chart** with alpha `0.00135` each tail. `p_bar=sum(d_baseline)/sum(n_baseline)`; find smallest u with `P(X>u)<=alpha`; largest l with `P(X<l)<=alpha`. UCL=u/n; LCL=l/n; high when d>u, low when d<l. Fixed baseline: first 10 weekdays, not contaminated by events. Western Electric rule 1 only.
+- Availability hand check (QC calculator fixture, independent of UI 10-day baseline gate): d=[2,4,3,3], n=[24,24,24,24] -> p_bar=.125; n24 u=9/UCL=.375; n20 u=8/UCL=.40; d10 flags, d8 does not. Median 07:35, 07:40, 07:50 -> 07:40 on 3 of 10 baseline days.
+- Maintenance: d=10/n=100 baseline -> p_bar=.10; u=20/UCL=.20; l=2/LCL=.02; d25 flags high, d20 does not, d<=1 flags low.
+- Suppress limits with explanation if fewer than 10 baseline days, zero-opportunity subgroup, or p_bar exactly 0 or 1. Repeat snapshots are correlated: signals are **exploratory**, not calibrated false-alarm claims. Count stable-dataset flags in demo. Target unusable proportion .10 is an SLA line, NOT a control limit.
+
+## Minimal report contract
+- `GET /api/datasets` lists exactly `stable.csv`, `planted_events.csv`, `edge_case.csv`; reject any other path/name.
+- `GET /api/report` returns `{dataset, availability:{AM:{stations:[...],selected_station_chart:...},PM:{...}},maintenance:{chart:{...},stations:[...]},meta:{synthetic:true,exploratory:true}}`; selecting another station can be handled by including a chart series for each station in the availability payload.
+- Chart points: date, n, d, p, p_bar, LCL, UCL, flagged_high/low, plus status/warnings. When n varies, control limit is stepped; no browser statistical calculations.
+- Availability station rows: station ID, latest unusable share, empty/full snapshot counts, p_bar, current UCL/signal, median first-unusable time with affected-day frequency, exactly the SPEC section-4 action and deterministic priority. Maintenance rows: station ID, disabled-bikes count at 07:00 and inspect/collect action.
+
+## Backend first — target 120 minutes, deployment contingent on access
+| Elapsed | Tasks | Output / mandatory gate |
+|---|---|---|
+| 0–10 min | H-01 | SPEC reviewed, interfaces frozen; unresolved name/prompt number tracked |
+| 10–35 min | H-02 + H-03 parallel | 3 CSVs/loader/codebook; exact binomial QC function + numerical tests + docs |
+| 35–65 min | H-09 + H-10 parallel | Availability/maintenance modules with independent tests and docs |
+| 65–80 min | H-04 | Thin FastAPI, full Python tests and live endpoint smoke checks — **HARD BACKEND GATE** |
+| 80–105 min | H-05 | React page built LAST, served by FastAPI; 3 dataset demos written |
+| 105–120 min | H-06, H-07, H-08 | Deployment + docs audit + submission checks, parallel where possible |
+
+**Owners:** Developer A handles QC + availability; Developer B handles CSV/loader + maintenance; API integrator handles glue/deploy. Specific owned paths and check-in permissions live in CONTRACT.yaml. Each task writes its own test and documentation alongside its code; H-07 only audits.
+
+## Risks
+1. Correlated snapshots invalidate nominal exact-binomial alarm rate: label exploratory and show stable-case false flags, do not claim prediction/causality.
+2. Day/window grouping, median-onset timing and precedence introduce many edge cases: assert exact numeric/ordered outcomes before any frontend work.
+3. Connect build and credentials could exceed 120 minutes: deploy single bundled FastAPI service, preserve four-script contract, do not claim a URL without checking it.
