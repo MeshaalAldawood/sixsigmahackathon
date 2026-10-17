@@ -23,7 +23,7 @@ This folder contains explainers and tutorials for the Six Sigma Hackathon.
 | [`icons.md`](icons.md) | emoji/icons for your README |
 
 Your team's SPEC and CONTRACT (pre-filled, at the repo root):
-[`SPEC.md`](../SPEC.md) and [`CONTRACT.yaml`](../CONTRACT.yaml); blank copies in
+[`SPEC.md`](../SPEC.md) and [`CONTRACT.md`](../CONTRACT.md); blank copies in
 [`.claude/templates/`](../.claude/templates/README.md). Starter templates:
 [`demos/`](../demos/README.md). Deploy workflows:
 [`.claude/skills/connect-publish/`](../.claude/skills/connect-publish/README.md).

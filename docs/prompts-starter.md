@@ -83,10 +83,10 @@ We are beginners: short sentences, and explain any jargon in a few words. When S
 ```text
 You are planning, not coding. Do not create or edit any file except docs/plan.md. This model allows only 5 requests a minute, so use as few steps as you can.
 
-1. In one step, read SPEC.md, CONTRACT.yaml and docs/plan.md (if it exists) completely, before you say anything. Do not search, list folders or re-read a file.
+1. In one step, read SPEC.md, CONTRACT.md and docs/plan.md (if it exists) completely, before you say anything. Do not search, list folders or re-read a file.
 2. In one sentence each, state: the user, the question the tool answers, every statistic, and the formula for each statistic (write the formula out). If SPEC.md leaves any of these unclear or still says FILL IN, stop and ask me before going on. A known-answer check with no concrete numbers (the input data AND the expected values) counts as FILL IN: stop, and offer to work out the numbers with me.
 3. List every design decision that is still open (data shape, where the data comes from, what the function or API returns, what the user sees, what counts as "in control" or "capable"). Ask them ALL in this ONE message, as a numbered list: at most 5 questions, each with at most 4 numbered options; mark the option you recommend and say why in one line. Then stop and wait. I will answer in one reply, for example "1-1, 2-3, 3-1". If nothing is open, say so and go straight to step 4.
-4. In your next turn, after my answers, write docs/plan.md: a numbered list of tasks, each mapped to one task id from CONTRACT.yaml (use the real ids; never invent one). For each task give: the files it may touch (from its owns list), the test that proves it (the known answer from SPEC.md section 4, AND a degenerate case such as constant data), and a time estimate. Every statistic comes first, each with its formula written out, then the tool around it, then the page or chart. Nothing about styling until the numbers are proven.
+4. In your next turn, after my answers, write docs/plan.md: a numbered list of tasks, each mapped to one task id from CONTRACT.md (use the real ids; never invent one). For each task give: the files it may touch (from its owns list), the test that proves it (the known answer from SPEC.md section 4, AND a degenerate case such as constant data), and a time estimate. Every statistic comes first, each with its formula written out, then the tool around it, then the page or chart. Nothing about styling until the numbers are proven.
 5. Under the tasks, list the decisions I made in step 3, one line each.
 6. End with the three biggest risks and what we will do about each.
 
@@ -106,7 +106,7 @@ Keep docs/plan.md under 60 lines. We are beginners: short sentences, and explain
 ```text
 You are helping my team make design decisions. Do not write code. The only file you may edit is docs/plan.md. This model allows only 5 requests a minute, so use as few steps as you can.
 
-1. In one step, read SPEC.md, CONTRACT.yaml and docs/plan.md (if it exists). Do not search or re-read a file.
+1. In one step, read SPEC.md, CONTRACT.md and docs/plan.md (if it exists). Do not search or re-read a file.
 2. Find the design decisions that are still open: anything SPEC.md or docs/plan.md leaves undecided or marks as a question, and anything two tasks disagree about.
 3. Ask them ALL in this ONE message, as a numbered list: at most 5 questions (if more are open, pick the ones that change the statistic or the inputs), each with at most 4 numbered options. Mark the option you recommend and give the reason in one line, tied to SPEC.md (the user, the statistic, or the rubric). Then stop and wait. I will answer in one reply, for example "1-1, 2-3, 3-1".
 4. In your next turn, after my answers, add or update a "Decisions" section in docs/plan.md: one line per decision, what we chose and why. If an answer changes SPEC.md, tell me the exact line to change; do not edit SPEC.md yourself.
@@ -133,20 +133,20 @@ requests: the free planning model allows only 5 a minute. At the end `docs/plan.
 
 ## 3. Build one task  (OpenCode: `/build H-03`)
 
-**When:** For exactly one task from `CONTRACT.yaml`, after the plan exists. Start a fresh session for every task.
+**When:** For exactly one task from `CONTRACT.md`, after the plan exists. Start a fresh session for every task.
 
 **Before pasting:** Replace `$1` on the first line with your task id, for example `H-03`.
 
 <!-- prompt: build -->
 ```text
 Task id: $1
-If the task id above is blank, list the todo tasks in CONTRACT.yaml and ask me which one. Do not guess.
+If the task id above is blank, list the todo tasks in CONTRACT.md and ask me which one. Do not guess.
 
-You build exactly this ONE task from CONTRACT.yaml. You are the IMPLEMENTER only. Do not launch subagents or any other agent, and do not review your own work: the review is a separate step that I run in a fresh session (/new, then /review with this task id).
+You build exactly this ONE task from CONTRACT.md. You are the IMPLEMENTER only. Do not launch subagents or any other agent, and do not review your own work: the review is a separate step that I run in a fresh session (/new, then /review with this task id).
 
-1. Before anything else, read SPEC.md completely (section 4 is the method and the known-answer check), docs/plan.md if it exists, and this task's block in CONTRACT.yaml.
+1. Before anything else, read SPEC.md completely (section 4 is the method and the known-answer check), docs/plan.md if it exists, and this task's block in CONTRACT.md.
 2. In one sentence, restate the statistic this task computes and its formula, exactly as SPEC.md section 4 states it. Stop and ask me if SPEC.md section 4 still says FILL IN, or if its known-answer check has no concrete numbers (the input data AND the expected values). A known-answer check with no concrete numbers counts as FILL IN. Never invent a statistic or a known answer.
-3. If you do not know my name for the owner field, ask me once. Get the time by running this command: date "+%Y-%m-%d %H:%M" (if it fails, run: python -c "import datetime; print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))"). Load the contract-ledger skill and check the task out: status: in_progress, owner, and started_at = the time the command printed, pasted (never a time you made up). Never delete a field. Quote any value that contains a colon.
+3. If you do not know my name for the owner field, ask me once. Get the time by running this command: date "+%Y-%m-%d %H:%M" (if it fails, run: python -c "import datetime; print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))"). Load the contract-ledger skill and check the task out: **Status:** `in_progress`, **Owner** and **Started at** = the time the command printed, pasted (never a time you made up). Never delete a field. Keep each Markdown field on one line.
 4. If the task computes a statistic, load the stats-first-steering skill. Write the tests first, then the code:
    - a known-answer test whose data and expected numbers are copied from SPEC.md section 4, never made up;
    - a degenerate case (constant data, or n = 1). With zero spread, a capability index such as Cp or Cpk is undefined: the code must raise a clear error, or return NaN or None with a message. inf, 0 or any other confident number is wrong, and a test that accepts one is wrong.
@@ -156,7 +156,7 @@ You build exactly this ONE task from CONTRACT.yaml. You are the IMPLEMENTER only
    - sigma-hat = R-bar/d2 for Cp and Cpk. Never use the overall standard deviation: that gives Pp and Ppk, a different statistic;
    - an out-of-control flag for each subgroup.
 6. Stay inside the task's owns list:
-   - Edit only the paths in its owns list, plus this task's block in CONTRACT.yaml.
+   - Edit only the paths in its owns list, plus this task's block in CONTRACT.md.
    - Never delete, move or rename a file. Never create a file outside the owns list; scratch checks go in tests/ (or another folder on the owns list), never at the repo root.
    - Every third-party package you import (numpy, pandas, scipy, ...) goes into the requirements file (for example app/requirements.txt) in the same step. If that file is not on the owns list, stop and tell me the exact line to add.
    - Use absolute package imports (from app.qc import ...), never relative ones (from .qc import ...). The app and every script must start from the repo root with one command.
@@ -177,11 +177,11 @@ DEFINITION OF DONE: the definition_of_done command and its real output
 NEXT: type /new, then /review with this task id
 ```
 
-**What good output looks like:** The task is checked out in `CONTRACT.yaml` with `owner` and `started_at` filled in (`started_at` is the real time, from the `date` command). The final message starts from the statistic in `SPEC.md` and ends with real output, not a claim:
+**What good output looks like:** The task is checked out in `CONTRACT.md` with `owner` and `started_at` filled in (`started_at` is the real time, from the `date` command). The final message starts from the statistic in `SPEC.md` and ends with real output, not a claim:
 
 ```
 STATISTIC: X-bar and R chart (subgroups of 5, limits from R-bar with A2, D3, D4), plus Cp and Cpk with sigma-hat = R-bar / d2
-FILES: app/qc.py, tests/test_qc.py, CONTRACT.yaml
+FILES: app/qc.py, tests/test_qc.py, CONTRACT.md
 TESTS: pytest tests
   2 passed in 0.21s
 DEFINITION OF DONE: pytest tests  ->  2 passed
@@ -203,12 +203,12 @@ If the last message only says "DONE", ask for the test output. If the statistic 
 <!-- prompt: review -->
 ```text
 Task id: $1
-If the task id above is blank, review the task in CONTRACT.yaml that is in_progress; if there is none, or more than one, ask me which.
+If the task id above is blank, review the task in CONTRACT.md that is in_progress; if there is none, or more than one, ask me which.
 
 You are the REVIEWER for this task. I run you in a fresh session (/new), after /build. Do the review yourself: do not launch subagents or any other agent. Do not edit, create or delete any file; run scratch checks as one-line python -c or Rscript -e commands.
 
 1. Load the stats-first-steering skill (.claude/skills/stats-first-steering/SKILL.md).
-2. Read SPEC.md section 4 (the method and the known-answer check), the task's block in CONTRACT.yaml, the files in its owns list, and its tests.
+2. Read SPEC.md section 4 (the method and the known-answer check), the task's block in CONTRACT.md, the files in its owns list, and its tests.
 3. List every statistic SPEC.md names. For each one, write the formula the code uses in one line and say whether it matches SPEC.md. A statistic SPEC.md names that the code does not compute is a FAIL. Code that computes a different statistic is a FAIL. Name any trap from the skill that applies. For an X-bar and R chart, check all of these:
    - R chart limits exist (constants D3 and D4);
    - Cp and Cpk use sigma-hat = R-bar/d2. The overall standard deviation gives Pp and Ppk: FAIL;
@@ -246,19 +246,19 @@ number) for them fails the review, even if a test accepts it.
 <!-- prompt: checkin -->
 ```text
 Task id: $1
-If the task id above is blank, use the task in CONTRACT.yaml that is in_progress; if there is none, or more than one, ask me which.
+If the task id above is blank, use the task in CONTRACT.md that is in_progress; if there is none, or more than one, ask me which.
 
 Check this task in, following the contract-ledger skill (.claude/skills/contract-ledger/SKILL.md).
 
-1. Run the task's definition_of_done exactly as written in CONTRACT.yaml. Paste the command and its real output. Never swap in a different command.
-2. If it failed, stop: the task is not done. Leave status: in_progress, write what is missing in result, and tell me.
-3. If it passed, change exactly two lines in this task's block in CONTRACT.yaml, one small edit each (the two lines are not next to each other, so never try to replace both in one edit): the status line becomes status: done, and the result line becomes result: "one line saying what exists now and the check that proved it". Do not rewrite or replace the block: owner, started_at, owns, notes and definition_of_done stay exactly as they are. In every edit, the new text keeps every line of the old text; only the status value and the result value change. If started_at is blank, run date "+%Y-%m-%d %H:%M" and paste what it prints (never a time you made up). Quote any value that contains a colon.
-4. Check the ledger: run python -c "import yaml; yaml.safe_load(open('CONTRACT.yaml'))" and git diff CONTRACT.yaml. If any line other than status and result changed, put it back before going on.
-5. Show me git status, the diff, and the exact commit command, staging files by name (the task's owned files plus CONTRACT.yaml; never git add . or git add -A). Then stop: end your message with the question "Commit these files? (yes/no)" and run nothing else. Commit only after I answer yes in my next message. Never push.
+1. Run the task's definition_of_done exactly as written in CONTRACT.md. Paste the command and its real output. Never swap in a different command.
+2. If it failed, stop: the task is not done. Leave **Status:** `in_progress`, write what is missing in result, and tell me.
+3. If it passed, change exactly two lines in this task's block in CONTRACT.md, one small edit each (the two lines are not next to each other, so never try to replace both in one edit): the status line becomes **Status:** `done`, and the **Result:** line records a one-line verified outcome. Do not rewrite or replace the block: owner, started_at, owns, notes and definition_of_done stay exactly as they are. In every edit, the new text keeps every line of the old text; only the status value and the result value change. If started_at is blank, run date "+%Y-%m-%d %H:%M" and paste what it prints (never a time you made up). Keep each Markdown field on one line.
+4. Check the ledger: run bash .claude/skills/superagent/scripts/check.sh and git diff CONTRACT.md. If any line other than status and result changed, put it back before going on.
+5. Show me git status, the diff, and the exact commit command, staging files by name (the task's owned files plus CONTRACT.md; never git add . or git add -A). Then stop: end your message with the question "Commit these files? (yes/no)" and run nothing else. Commit only after I answer yes in my next message. Never push.
 6. After the commit, paste the definition_of_done output again and the commit hash.
 ```
 
-**What good output looks like:** The `definition_of_done` output pasted, the task's block in `CONTRACT.yaml` showing `status: done`, a one-line `result` and `owner`/`started_at` still filled in, the diff, and a `git add` that names files, ending with "Commit these files? (yes/no)". It commits only after you type yes. In OpenCode the repo's `opencode.json` also makes OpenCode ask before any `git commit` or `git push`: choose **allow once** only after you have read the diff.
+**What good output looks like:** The `definition_of_done` output pasted, the task's block in `CONTRACT.md` showing **Status:** `done`, a one-line **Result** and **Owner**/**Started at** still filled in, the diff, and a `git add` that names files, ending with "Commit these files? (yes/no)". It commits only after you type yes. In OpenCode the repo's `opencode.json` also makes OpenCode ask before any `git commit` or `git push`: choose **allow once** only after you have read the diff.
 
 **Works the same in every agent.** Nothing here needs subagents or a question tool.
 

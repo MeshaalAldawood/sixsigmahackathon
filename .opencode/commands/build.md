@@ -4,13 +4,13 @@ agent: build
 model: google/gemini-3.1-flash-lite
 ---
 Task id: $1
-If the task id above is blank, list the todo tasks in CONTRACT.yaml and ask me which one. Do not guess.
+If the task id above is blank, list the todo tasks in CONTRACT.md and ask me which one. Do not guess.
 
-You build exactly this ONE task from CONTRACT.yaml. You are the IMPLEMENTER only. Do not launch subagents or any other agent, and do not review your own work: the review is a separate step that I run in a fresh session (/new, then /review with this task id).
+You build exactly this ONE task from CONTRACT.md. You are the IMPLEMENTER only. Do not launch subagents or any other agent, and do not review your own work: the review is a separate step that I run in a fresh session (/new, then /review with this task id).
 
-1. Before anything else, read SPEC.md completely (section 4 is the method and the known-answer check), docs/plan.md if it exists, and this task's block in CONTRACT.yaml.
+1. Before anything else, read SPEC.md completely (section 4 is the method and the known-answer check), docs/plan.md if it exists, and this task's block in CONTRACT.md.
 2. In one sentence, restate the statistic this task computes and its formula, exactly as SPEC.md section 4 states it. Stop and ask me if SPEC.md section 4 still says FILL IN, or if its known-answer check has no concrete numbers (the input data AND the expected values). A known-answer check with no concrete numbers counts as FILL IN. Never invent a statistic or a known answer.
-3. If you do not know my name for the owner field, ask me once. Get the time by running this command: date "+%Y-%m-%d %H:%M" (if it fails, run: python -c "import datetime; print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))"). Load the contract-ledger skill and check the task out: status: in_progress, owner, and started_at = the time the command printed, pasted (never a time you made up). Never delete a field. Quote any value that contains a colon.
+3. If you do not know my name for the owner field, ask me once. Get the time by running this command: date "+%Y-%m-%d %H:%M" (if it fails, run: python -c "import datetime; print(datetime.datetime.now().strftime('%Y-%m-%d %H:%M'))"). Load the contract-ledger skill and check the task out: **Status:** `in_progress`, **Owner:** the human/agent owner, and **Started at:** = the time the command printed, pasted (never a time you made up). Never delete a field. Keep each Markdown field on one line.
 4. If the task computes a statistic, load the stats-first-steering skill. Write the tests first, then the code:
    - a known-answer test whose data and expected numbers are copied from SPEC.md section 4, never made up;
    - a degenerate case (constant data, or n = 1). With zero spread, a capability index such as Cp or Cpk is undefined: the code must raise a clear error, or return NaN or None with a message. inf, 0 or any other confident number is wrong, and a test that accepts one is wrong.
@@ -20,7 +20,7 @@ You build exactly this ONE task from CONTRACT.yaml. You are the IMPLEMENTER only
    - sigma-hat = R-bar/d2 for Cp and Cpk. Never use the overall standard deviation: that gives Pp and Ppk, a different statistic;
    - an out-of-control flag for each subgroup.
 6. Stay inside the task's owns list:
-   - Edit only the paths in its owns list, plus this task's block in CONTRACT.yaml.
+   - Edit only the paths in its owns list, plus this task's block in CONTRACT.md.
    - Never delete, move or rename a file. Never create a file outside the owns list; scratch checks go in tests/ (or another folder on the owns list), never at the repo root.
    - Every third-party package you import (numpy, pandas, scipy, ...) goes into the requirements file (for example app/requirements.txt) in the same step. If that file is not on the owns list, stop and tell me the exact line to add.
    - Use absolute package imports (from app.qc import ...), never relative ones (from .qc import ...). The app and every script must start from the repo root with one command.

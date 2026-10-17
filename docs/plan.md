@@ -1,6 +1,6 @@
 # Build Plan — Finalized Bikeshare Fleets SPEC
 
-**Authority:** [SPEC.md](../SPEC.md) is the product contract, [CONTRACT.yaml](../CONTRACT.yaml) is the executable ledger. Follow the task list order in CONTRACT.yaml (H-09/H-10 deliberately precede H-04). This plan records architecture and decisions, not task check-ins.
+**Authority:** [SPEC.md](../SPEC.md) is the product contract, [CONTRACT.md](../CONTRACT.md) is the executable ledger. Follow the task list order in CONTRACT.md (H-09/H-10 deliberately precede H-04). This plan records architecture and decisions, not task check-ins.
 
 ## Decision record
 | ID | Choice | Why / rejected alternative |
@@ -43,7 +43,7 @@
 | 80–105 min | H-05 | React page built LAST, served by FastAPI; 3 dataset demos written |
 | 105–120 min | H-06, H-07, H-08 | Deployment + docs audit + submission checks, parallel where possible |
 
-**Owners:** Developer A handles QC + availability; Developer B handles CSV/loader + maintenance; API integrator handles glue/deploy. Specific owned paths and check-in permissions live in CONTRACT.yaml. Each task writes its own test and documentation alongside its code; H-07 only audits.
+**Owners:** Developer A handles QC + availability; Developer B handles CSV/loader + maintenance; API integrator handles glue/deploy. Specific owned paths and check-in permissions live in CONTRACT.md. Each task writes its own test and documentation alongside its code; H-07 only audits.
 
 ## Risks
 1. Correlated snapshots invalidate nominal exact-binomial alarm rate: label exploratory and show stable-case false flags, do not claim prediction/causality.

@@ -25,53 +25,51 @@ else
   echo "FAIL  SPEC.md missing (run this from the repo root)"; fail=1
 fi
 
-# 2. CONTRACT.yaml parses; one line per task.
+# 2. CONTRACT.md validates; one line per task.
 ndone=0; ntasks=0; nexttask=""
-if [ ! -s CONTRACT.yaml ]; then
-  echo "FAIL  CONTRACT.yaml missing (run this from the repo root)"; fail=1
+if [ ! -s CONTRACT.md ]; then
+  echo "FAIL  CONTRACT.md missing (run this from the repo root)"; fail=1
 elif [ -z "$py" ]; then
-  echo "FAIL  no python found to parse CONTRACT.yaml"; fail=1
+  echo "FAIL  no python found to parse CONTRACT.md"; fail=1
 else
-  out=$("$py" -X utf8 - CONTRACT.yaml <<'PY'
+  out=$("$py" -X utf8 - CONTRACT.md <<'PY'
 import re, sys
 path = sys.argv[1]
-text = open(path, encoding="utf-8").read()
+source = open(path, encoding="utf-8").read()
+headings = list(re.finditer(r"(?m)^### (H-\d{2}) — (.+)$", source))
+if not headings:
+    print("BAD no H-XX task headings found"); sys.exit(0)
 tasks = []
-how = "pyyaml"
-try:
-    import yaml
-    doc = yaml.safe_load(text)
-    for t in (doc.get("tasks") or []):
-        tasks.append((str(t.get("id", "?")), str(t.get("status", "?")), str(t.get("owner") or "")))
-except ImportError:
-    how = "fallback parser"
-    if "\t" in text:
-        print("BAD tabs in CONTRACT.yaml (YAML forbids tabs)"); sys.exit(0)
-    for block in re.split(r"(?m)^\s*- id:\s*", text)[1:]:
-        tid = block.split("\n", 1)[0].strip().strip("\"'")
-        st = re.search(r"(?m)^\s+status:\s*(\S+)", block)
-        ow = re.search(r"(?m)^\s+owner:\s*(.*)$", block)
-        tasks.append((tid, st.group(1).strip("\"'") if st else "?",
-                      ow.group(1).strip().strip("\"'") if ow else ""))
-except Exception as e:
-    print("BAD does not parse: %s" % str(e).splitlines()[0]); sys.exit(0)
-if not tasks:
-    print("BAD no tasks found under tasks:"); sys.exit(0)
-bad = [t for t in tasks if t[1] not in ("todo", "in_progress", "done", "blocked")]
-ndone = sum(1 for t in tasks if t[1] == "done")
+required = ("Points", "Status", "Owner", "Started at", "Owns", "Definition of done", "Result")
+for i, heading in enumerate(headings):
+    block = source[heading.end():headings[i+1].start() if i+1 < len(headings) else len(source)]
+    fields = {}
+    for name in required:
+        match = re.search(r"(?m)^\*\*" + re.escape(name) + r":\*\*\s*(.+)$", block)
+        if not match:
+            print("BAD task %s missing %s" % (heading.group(1), name)); sys.exit(0)
+        fields[name] = match.group(1).strip()
+    status = fields["Status"].strip("`")
+    owner = fields["Owner"].strip("`")
+    tasks.append((heading.group(1), status, owner))
+ids = [t[0] for t in tasks]
+if len(ids) != len(set(ids)):
+    print("BAD duplicate task ID"); sys.exit(0)
+bad = [t for t in tasks if t[1] not in ("todo", "in_progress", "blocked", "done")]
+done = sum(1 for t in tasks if t[1] == "done")
 nxt = next((t[0] for t in tasks if t[1] in ("in_progress", "todo")), "")
-print("OK parses with %s: %d tasks, %d done" % (how, len(tasks), ndone))
-for tid, st, ow in tasks:
-    print("TASK %-5s status=%-12s owner=%s" % (tid, st, ow or "-"))
+print("OK Markdown task ledger: %d tasks, %d done" % (len(tasks), done))
+for tid, st, owner in tasks:
+    print("TASK %-5s status=%-12s owner=%s" % (tid, st, owner or "-"))
 if bad:
     print("BAD unknown status on: " + ", ".join(t[0] for t in bad))
-print("NUMS %d %d %s" % (len(tasks), ndone, nxt))
+print("NUMS %d %d %s" % (len(tasks), done, nxt))
 PY
 )
   if echo "$out" | grep -q "^BAD"; then
-    echo "$out" | grep "^BAD" | sed 's/^BAD /FAIL  CONTRACT.yaml: /'; fail=1
+    echo "$out" | grep "^BAD" | sed 's/^BAD /FAIL  CONTRACT.md: /'; fail=1
   else
-    echo "$out" | grep "^OK" | sed 's/^OK /ok    CONTRACT.yaml /'
+    echo "$out" | grep "^OK" | sed 's/^OK /ok    CONTRACT.md /'
     echo "$out" | grep "^TASK" | sed 's/^TASK /      task /'
     nums=$(echo "$out" | grep "^NUMS")
     ntasks=$(echo "$nums" | awk '{print $2}'); ndone=$(echo "$nums" | awk '{print $3}'); nexttask=$(echo "$nums" | awk '{print $4}')
@@ -89,7 +87,7 @@ else echo "FAIL  .claude/skills/superagent/SKILL.md missing"; fail=1; fi
 # 5. Closed-loop gate for a team that has started.
 if [ "$team" -eq 1 ]; then
   if [ "$ndone" -ge 1 ]; then echo "ok    --team: $ndone task(s) checked in as done"
-  else echo "FAIL  --team: no task is done yet. Run a task's definition_of_done, then set status: done and a one-line result"; fail=1; fi
+  else echo "FAIL  --team: no task is done yet. Run a task's definition_of_done, then set **Status:** `done` and a one-line **Result**"; fail=1; fi
 fi
 
 # 6. One line: what to do next.

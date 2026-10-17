@@ -10,7 +10,7 @@ This playbook is for engineers who use AI to build, not the other way around. Th
 
 **What it is.** A closed loop is a task you can finish without anyone's opinion. It ends in a command that passes or a URL that answers. An open loop ends in "it should work".
 
-**The loop:** `SPEC.md` (what the tool is) -> `CONTRACT.yaml` (what is being done) -> build one task -> verify -> record (`status: done` plus a one-line `result`, same commit as the work).
+**The loop:** `SPEC.md` (what the tool is) -> `CONTRACT.md` (what is being done) -> build one task -> verify -> record (`status: done` plus a one-line `result`, same commit as the work).
 
 **Decisions and why**
 - Every task's `definition_of_done` is a command or a URL. If you cannot write the command, you do not yet know what "done" means. Fix that first.
@@ -55,7 +55,7 @@ This playbook is for engineers who use AI to build, not the other way around. Th
 **What it is.** The agent has a limited reading window. Everything loaded stays loaded, and a crowded window makes it forget and make mistakes.
 
 **Decisions and why**
-- **Always read, and nothing more:** `CLAUDE.md` or `AGENTS.md`, `SPEC.md`, `CONTRACT.yaml`, and the `/superagent` router. Keep these short.
+- **Always read, and nothing more:** `CLAUDE.md` or `AGENTS.md`, `SPEC.md`, `CONTRACT.md`, and the `/superagent` router. Keep these short.
 - **Load a skill when its row fires.** The routing table says when. Do not preload skills "just in case".
 - **Long files: read the table of contents, then grep.** The glossary (`.claude/skills/glossary/SKILL.md`) is about 1,400 lines. `grep -n "Control charts" .claude/skills/glossary/SKILL.md`, then read only that section.
 - **One task per session or subagent.** Finish it, record it, start fresh.
@@ -68,7 +68,7 @@ This playbook is for engineers who use AI to build, not the other way around. Th
 
 **What it is.** Each fact lives in exactly one place. Everything else points to it.
 
-- `SPEC.md` says what the tool is. `CONTRACT.yaml` says what is being done. `docs/plan.md` says how.
+- `SPEC.md` says what the tool is. `CONTRACT.md` says what is being done. `docs/plan.md` says how.
 - **When they disagree, fix the document, not the code.** If the plan and the SPEC clash, decide which is right, edit the wrong document, then build.
 - **One function per statistic.** The API route, the page and the tests all import it. If a number is computed in two places, they will drift.
 - **Never copy a number into two places.** Not a limit, not a constant, not an example result. Compute it once, or put it in `data/` with the codebook.
@@ -98,7 +98,7 @@ This playbook is for engineers who use AI to build, not the other way around. Th
 - Copy **ONE** folder from `demos/` (`fastapi`, `plumber`, `reactfront`, `shinyapp`, `pypackage`, `rpackage`) into `app/`. `demos/README.md` has the list. Do not edit `demos/` in place.
 - Keep the **four-script contract** in `app/`: `testme`, `manifestme`, `deployme`, `README.md`. One command each, no arguments.
 - Deploy workflows come from `.claude/skills/connect-publish/workflows/`. Copy one to `.github/workflows/`. Steps are in `.claude/skills/connect-publish/README.md`.
-- Blank `SPEC.md`, `CONTRACT.yaml`, `CLAUDE.md`, `AGENTS.md` for a fresh repo are in `.claude/templates/`.
+- Blank `SPEC.md`, `CONTRACT.md`, `CLAUDE.md`, `AGENTS.md` for a fresh repo are in `.claude/templates/`.
 - Write the statistic in a plain function file (`app/qc.py` or `app/qc.R`) that the template calls.
 
 **Things to avoid:** generating a framework from scratch when a template exists; mixing two stacks in one `app/`; editing the template and the copy.

@@ -1,56 +1,41 @@
 ---
 name: contract-ledger
-description: Work one task at a time from CONTRACT.yaml - check a task out before starting and check it in (status done + one-line result) in the same commit as the work. Load when asked to start, pick up, claim, finish or check in a task, when about to build something, or when someone says "check out H-03" or "what's next".
+description: Use CONTRACT.md as the only task ledger. Check one task out, change only its owned paths, run its acceptance check, and check it in with a one-line verified result in the same commit. Use for build, claim, resume, complete or review requests.
 ---
 
-# contract-ledger
+# Contract ledger (Markdown)
 
-[`CONTRACT.yaml`](../../../CONTRACT.yaml) at the repo root is the team's task ledger;
-[`SPEC.md`](../../../SPEC.md), also at the root, says what the tool IS. Both come pre-filled: read them first.
-Blank copies (for a second project, or to start over) are in [`.claude/templates/`](../../templates/README.md).
+[CONTRACT.md](../../../CONTRACT.md) is the **only** task ledger. [SPEC.md](../../../SPEC.md) defines the product. Read both before beginning work. Follow the task sections in **document order**, not numeric order, because H-09/H-10 precede the H-04 backend gate.
 
-## Before any work: is there a task?
+## Before work: find a task
 
-Find the task in `CONTRACT.yaml` that covers the request. If none does, **propose** a new block (append it,
-never rewrite another task) with `id`, `title`, `status: todo`, `owner: ""`, `owns: [...]` (the paths it
-will write) and a `definition_of_done` that is a command that passes, a file that exists or a URL that
-answers. Wait for a human to agree before building it.
+A task starts with a heading `### H-XX — Title`, and has explicit **Status**, **Owner**, **Started at**, **Owns**, **Notes**, **Definition of done**, and **Result** fields. Its status is one of `todo`, `in_progress`, `blocked`, `done`. If the work is not covered, propose a new section and wait for teammate approval. Do not make up a task or edit another task.
 
 ## Check out
 
-Edit only that task's block:
+Change **only** the selected task's fields (keeping each on one line):
 
-```yaml
-    status: in_progress
-    owner: "<name, or agent + teammate>"
-    started_at: "<YYYY-MM-DD HH:MM>"
+```markdown
+**Status:** `in_progress`
+
+**Owner:** `developer or agent + teammate`
+
+**Started at:** `2026-10-17 09:00`
 ```
 
-Refuse to check out a task that a teammate already has `in_progress`. Say so and suggest another.
+The timestamp above is **only a formatting example**. Run `date "+%Y-%m-%d %H:%M"` and use the actual returned time. Never check out another person's `in_progress` task without agreement. Each person/agent may hold only one active task.
 
 ## Work
 
-Write only inside the task's `owns` paths. Need something outside them? Stop and add a task first.
-Keep the change small enough for a human to read the whole diff.
+Modify files listed under this task's **Owns** only (besides its own section of `CONTRACT.md`). Keep tests and task-specific documentation alongside the code, not as an afterthought. If a new dependency requires an unowned file, stop and request reassignment.
 
 ## Check in
 
-1. Run the `definition_of_done` exactly as written and quote what it printed. If it fails, the task is not done.
-2. Edit the block:
+1. Run the task's **Definition of done** as written. Quote the real output; if it fails, leave the task in progress or blocked.
+2. Change only `**Status:** \`done\`` and `**Result:** \`one-line verified outcome\`` in the selected task section; preserve all other fields.
+3. Stage explicit owned paths and ledger together, for example: `git add app/qc.py tests/test_qc.py docs/statistics.md CONTRACT.md`, then commit only after the human approves the diff. No automatic pushes.
+4. To inspect ledger structure and task states run `bash .claude/skills/superagent/scripts/check.sh`. **Do not use a YAML parser.**
 
-   ```yaml
-       status: done
-       result: "<one line: what exists now and the check that proved it>"
-   ```
+## Invariants
 
-3. Commit the work and the ledger together, staging explicit paths:
-   `git add <owned paths> CONTRACT.yaml && git commit -m "H-03: <title>; check in"`.
-4. If the check only partly passed, leave `status: in_progress` and write what is missing in `result`.
-
-## Check the ledger parses
-
-```bash
-python -c "import yaml; yaml.safe_load(open('CONTRACT.yaml'))"
-```
-
-Quote any string that contains a colon. No tabs.
+The H-04 backend gate must be `done` with real passing tests before H-05 frontend starts. Never claim completion without the executed checks. Keep `CONTRACT.md` as Markdown, not a YAML code block.

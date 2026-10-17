@@ -12,16 +12,16 @@ if [ -f SPEC.md ]; then
 fi
 echo "SPEC.md: $fill FILL IN line(s) still to fill."
 
-# CONTRACT.yaml: remember the last task id, print it when its status is in_progress.
+# CONTRACT.md: track in-progress task headings (bash built-ins only).
 active=""
-if [ -f CONTRACT.yaml ]; then
+if [ -f CONTRACT.md ]; then
   id=""
   while IFS= read -r line; do
     case "$line" in
-      *"- id:"*) id="${line#*- id:}"; id="${id//[ \"\']/}" ;;
-      *"status:"*"in_progress"*) case "$line" in "#"*) ;; *) active="$active$id " ;; esac ;;
+      "### H-"*) id="${line#\#\#\# }"; id="${id%% *}" ;;
+      '**Status:** `in_progress`') [ -n "$id" ] && active="$active$id " ;;
     esac
-  done < CONTRACT.yaml
+  done < CONTRACT.md
 fi
 echo "In progress: ${active:-none}"
 

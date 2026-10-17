@@ -64,7 +64,7 @@ Join the kickoff, read the [prompts](prompts.md), and confirm your team's
 prompt early. Then stick to it.
 
 ### Phase II — Plan
-Describe your app and ask your agent to update [`SPEC.md`](../SPEC.md) (read the diff), look over [`CONTRACT.yaml`](../CONTRACT.yaml), design
+Describe your app and ask your agent to update [`SPEC.md`](../SPEC.md) (read the diff), look over [`CONTRACT.md`](../CONTRACT.md), design
 your test data, and divide the work.
 
 ### Phase III — Build
