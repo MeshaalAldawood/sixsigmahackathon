@@ -71,11 +71,11 @@
 
 **Points:** 25 - Working-tool implementation (availability portion)
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:15`
 
 **Owns:** `app/availability.py`, `tests/test_availability.py`, `docs/availability.md`
 
@@ -83,17 +83,17 @@
 
 **Definition of done:** python -m pytest tests/test_availability.py -q && test -f docs/availability.md; tests cover AM/PM separation, exact control limits, actions/precedence, missing snapshots, chronic target vs special-cause signal, median time and ties.
 
-**Result:** `—`
+**Result:** `app/availability.py build_availability AM/PM station p-charts and first-match dispatch rows, docs/availability.md; DoD printed 23 passed, exit 0; independent review recomputed 660 points from raw CSVs, 0 mismatches, OVERALL PASS`
 
 ### H-10 — Maintenance 07:00 network p-chart and station list
 
 **Points:** 25 - Working-tool implementation (maintenance portion)
 
-**Status:** `todo`
+**Status:** `in_progress`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:15`
 
 **Owns:** `app/maintenance.py`, `tests/test_maintenance.py`, `docs/maintenance.md`
 
