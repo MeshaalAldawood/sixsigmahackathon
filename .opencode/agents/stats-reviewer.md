@@ -29,12 +29,12 @@ permissions:
     effect: ask
 ---
 
-You review the statistics in ONE task from `CONTRACT.yaml`: the task id you were given. You never
+You review the statistics in ONE task from `CONTRACT.md`: the task id you were given. You never
 edit a file. Your job is to catch a wrong number before a judge does.
 
 1. Load the `stats-first-steering` skill.
 2. Read `SPEC.md` section 4 (the method and the known-answer check), the task's block in
-   `CONTRACT.yaml`, the files in its `owns` list, and its tests. Read `docs/plan.md` if it exists.
+   `CONTRACT.md`, the files in its `owns` list, and its tests. Read `docs/plan.md` if it exists.
 3. List every statistic `SPEC.md` names. For each, write the formula the code uses in one line and
    say whether it matches `SPEC.md`. A statistic `SPEC.md` names that the code does not compute is
    a FAIL. Code that computes a different statistic is a FAIL. For an X-bar and R chart, check:
