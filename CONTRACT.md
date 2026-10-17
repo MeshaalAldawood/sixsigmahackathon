@@ -35,11 +35,11 @@
 
 **Points:** 10 - Tool Documentation: 2-3 working test datasets (5), codebook (5)
 
-**Status:** `todo`
+**Status:** `in_progress`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator); prior draft by Mohammed Albarrak`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:10`
 
 **Owns:** `data/`, `app/data_loader.py`, `tests/test_loader.py`, `tests/test_data.py`
 
@@ -53,11 +53,11 @@
 
 **Points:** 25 - Tool Implementation: valid quality-control statistics in Python
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:07`
 
 **Owns:** `app/qc.py`, `app/requirements.txt`, `tests/test_qc.py`, `docs/statistics.md`
 
@@ -65,7 +65,7 @@
 
 **Definition of done:** python -m pytest tests/test_qc.py -q && test -f docs/statistics.md; numeric assertions reproduce every SPEC section-4 hand answer including changed-n limits, boundary equality, lower flags and invalid cases.
 
-**Result:** `—`
+**Result:** `app/qc.py exact-binomial p_chart (scipy 1.18.1, pinned app/requirements.txt) and docs/statistics.md; DoD printed 30 passed, exit 0; independent stats-reviewer table OVERALL PASS on every SPEC .125/.10 answer plus n=200 u=34`
 
 ### H-09 — Availability AM/PM decision module and tests
 
