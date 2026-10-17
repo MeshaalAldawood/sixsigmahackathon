@@ -1,6 +1,6 @@
 ---
 name: superagent
-description: The one front door for a Six Sigma Hackathon team. Reads the repo's state, fills in SPEC.md from the team's own description, asks every open design decision as one set of multiple-choice questions, writes the plan, then builds, reviews, checks in and deploys the CONTRACT.yaml tasks one at a time, loading every other skill, template and plugin on its own. Use when someone types "/superagent" (with or without an app idea), says "superagent", "plan our app", "build our tool", "what's next", "where are we", "keep going", or makes any request to start or continue the hackathon project.
+description: The one front door for a Six Sigma Hackathon team. Reads the repo's state, fills in SPEC.md from the team's own description, asks every open design decision as one set of multiple-choice questions, writes the plan, then builds, reviews, checks in and deploys the CONTRACT.md tasks one at a time, loading every other skill, template and plugin on its own. Use when someone types "/superagent" (with or without an app idea), says "superagent", "plan our app", "build our tool", "what's next", "where are we", "keep going", or makes any request to start or continue the hackathon project.
 ---
 
 # superagent: from an app idea to a deployed, tested tool
@@ -23,7 +23,7 @@ Do these in order, without being asked. `$ARGUMENTS` (or whatever the user typed
 "superagent") is the team's description of their app; it may be blank.
 
 1. **Read the state, not your memory.** Run `bash .claude/skills/superagent/scripts/check.sh`
-   and read `SPEC.md` and `CONTRACT.yaml` completely. Paste the check output. Read `docs/plan.md`
+   and read `SPEC.md` and `CONTRACT.md` completely. Paste the check output. Read `docs/plan.md`
    too if it exists.
 2. **Tool check, once.** If you have no browser tool (Playwright) or no library-docs tool
    (Context7), or the team wants a UI polish (impeccable) or animation (motion.dev), ask ONE
@@ -34,7 +34,7 @@ Do these in order, without being asked. `$ARGUMENTS` (or whatever the user typed
    team name, the track, the chosen prompt or the repo URL: ask. Work the known-answer numbers out
    by hand, in the chat, with the arithmetic shown. Show `git diff SPEC.md`.
 4. **Say where they are, in plain words.** What is done, and the next 3-6 CONTRACT tasks with their
-   ids and one line each. Tasks run in the CONTRACT order (H-01 to H-08), except: make the public
+   ids and one line each. Tasks run in the explicit CONTRACT.md document order (including H-09/H-10 before H-04), except: make the public
    repo (the first half of H-08) as soon as H-04 works, so H-06 can deploy early.
 5. **Ask every open decision at once.** Collect every open design choice (data shape, inputs, what
    the function returns, what the user sees, what counts as "in control" or "capable", the stack).
@@ -139,7 +139,7 @@ A command-line tool is cheaper, faster and more exact than an MCP server. Use MC
 
 ## 5. Context economy
 
-- Always read: this file, `SPEC.md`, `CONTRACT.yaml` (and `docs/plan.md` once it exists). Nothing else.
+- Always read: this file, `SPEC.md`, `CONTRACT.md` (and `docs/plan.md` once it exists). Nothing else.
 - Everything else is loaded at the row in section 1 that needs it, and read by section (heading or grep).
 - Subagents keep the main thread small: they read the code and run the tests; you read their report.
 - One task per subagent or session. Start fresh between tasks; the files carry the memory.
@@ -164,9 +164,9 @@ Give every subagent exactly these six fields, short:
 
 ```text
 MISSION:    one sentence, the CONTRACT task's title in your words.
-READ FIRST: SPEC.md (section 4), docs/plan.md, this task's block in CONTRACT.yaml,
+READ FIRST: SPEC.md (section 4), docs/plan.md, this task's block in CONTRACT.md,
             and the skill its row in the routing table names.
-OWNS:       the task's owns list, plus its block in CONTRACT.yaml. Nothing else.
+OWNS:       the task's owns list, plus its block in CONTRACT.md. Nothing else.
 TASK ID:    H-0n
 VERIFY:     the task's definition_of_done, plus the known-answer and degenerate tests.
 REPORT:     STATISTICS, FILES, RUN, TESTS, DEFINITION OF DONE (real output pasted),
