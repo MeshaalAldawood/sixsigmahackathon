@@ -1,0 +1,83 @@
+{
+  "version": 1,
+  "locale": "English_United Kingdom.1252",
+  "metadata": {
+    "appmode": "python-fastapi",
+    "entrypoint": "app:app"
+  },
+  "python": {
+    "version": "3.12.15",
+    "package_manager": {
+      "name": "pip",
+      "version": "26.2.1",
+      "package_file": "requirements.txt"
+    }
+  },
+  "environment": {
+    "python": {
+      "requires": "~=3.12.0"
+    }
+  },
+  "files": {
+    "requirements.txt": {
+      "checksum": "4bc45eade30a216733ac17b03736edd5"
+    },
+    ".python-version": {
+      "checksum": "61939823fbcc7e8de3b61ab105331baf"
+    },
+    "README.md": {
+      "checksum": "fdad093081cb01574f3c3300aad7eeea"
+    },
+    "__init__.py": {
+      "checksum": "4564b7a6b66f460e57b48cb764cc3529"
+    },
+    "app.py": {
+      "checksum": "aba0bb18286bd953b2417f5c4bd4fa88"
+    },
+    "availability.py": {
+      "checksum": "49b35008bdf8f88ed5bf28e40284a95b"
+    },
+    "data/edge_case.csv": {
+      "checksum": "c42340ee76e0482e37631ee1267b1689"
+    },
+    "data/planted_events.csv": {
+      "checksum": "ebc79d44190ebf4a33008ed91a7d83ce"
+    },
+    "data/stable.csv": {
+      "checksum": "c0cac67f5f560c070ead7758a3b38ebd"
+    },
+    "data_loader.py": {
+      "checksum": "159521f590a0c4208a566d9de9155a9e"
+    },
+    "deployme.sh": {
+      "checksum": "97ba623b9eaae21454a5c29a64c3a89e"
+    },
+    "maintenance.py": {
+      "checksum": "d0bb133286b0671ca6c5320aaeff0752"
+    },
+    "manifestme.sh": {
+      "checksum": "51cb5f50c23963e9fe6edc2a85d7e5c2"
+    },
+    "qc.py": {
+      "checksum": "fe972c49ad5c194630abe371f147e66e"
+    },
+    "replay.py": {
+      "checksum": "8865985845a6c1a9821ed9a42832edd0"
+    },
+    "static/assets/index-BezrHRXg.js": {
+      "checksum": "7f68f2d2e7d8ec50301aab14fd7a3d5e"
+    },
+    "static/assets/index-Boul_UeS.css": {
+      "checksum": "bea49a37c7a6a348387913440a5791a2"
+    },
+    "static/index.html": {
+      "checksum": "3fccaedb388a1efaa24057af808297b2"
+    },
+    "testme.ps1": {
+      "checksum": "ea6a6bae91027514db7fb8c1cb5aacbf"
+    },
+    "testme.sh": {
+      "checksum": "64d613f87c41ceab3edada7fee4a2217"
+    }
+  }
+}

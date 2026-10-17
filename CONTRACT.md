@@ -239,11 +239,11 @@
 
 **Priority:** `P2`
 
-**Status:** `todo`
+**Status:** `in_progress`
 
-**Owner:** `unassigned`
+**Owner:** `Claude Code`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 10:40`
 
 **Owns:** `app/testme.ps1`, `app/testme.sh`, `app/manifestme.sh`, `app/deployme.sh`, `app/.python-version`, `app/requirements.txt`, `app/README.md`, `app/data/`, `app/manifest.json`, `.github/workflows/`, `.github/scripts/`, `tests/test_startup.py`, `README.md`, `docs/deployment.md`, `docs/verification.md`, `demo/screenshots/`
 
