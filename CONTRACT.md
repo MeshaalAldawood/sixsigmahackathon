@@ -161,11 +161,11 @@
 
 **Points:** 10 - Tool Documentation: complete user and function documentation
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude Code`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 10:50`
 
 **Owns:** `README.md`, `docs/verification.md`
 
@@ -173,7 +173,7 @@
 
 **Definition of done:** python -m pytest -q passes and test -f README.md && test -f docs/verification.md; a fresh-clone reader can run app/testme.sh and reproduce exact binomial hand-answer checks and the three dataset demonstrations from documentation.
 
-**Result:** `—`
+**Result:** `63 pytest + 4 vitest pass on a fresh clone; testme.sh and testme.ps1 serve all three reports; README rewritten for the tool with inputs, exact rules, hand checks and three demos; docs/verification.md records the review.`
 
 ### H-08 — Verify reproducible public repo and submit on Devpost
 
