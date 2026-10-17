@@ -9,7 +9,7 @@
 3. Work only in **Owns** paths. If two agents need the same file, coordinate its owner first. When work is verified, change **Status** to `done` and record a factual one-line **Result** in the same commit as the task files.
 4. Run the task's **Definition of done** and quote its actual output; never mark a task done without verification. Code, tests and task-specific documentation are completed together.
 5. The **frontend cannot start until H-04's backend gate is done**. Keep all statistics in Python and the three datasets synthetic. Do not add new features or secrets.
-6. Read this Markdown file directly. **No YAML ledger or YAML parser is required**. Use `bash .claude/skills/superagent/scripts/check.sh` to inspect task statuses.
+6. Completed older tasks are **historical evidence**; for replay work, files named in H-11–H-13 belong only to those NEW active tasks. Reopen/transfer a path with explicit approval if needed; no two active tasks edit the same file. Read this Markdown file directly. **No YAML ledger or YAML parser is required**. Use `bash .claude/skills/superagent/scripts/check.sh` to inspect task statuses.
 
 ## Tasks (execution order)
 
@@ -138,6 +138,60 @@
 **Definition of done:** npm --prefix app/frontend run build && python -m pytest tests/test_static.py -q && python -m pytest -q; one local FastAPI origin renders a built React page, three datasets, AM/PM station and maintenance charts, recommended actions and warning states; demo/README.md walks through all three examples with actual observed results.
 
 **Result:** `React page in app/frontend built to app/static and served by FastAPI on one origin, docs/integration.md, demo/README.md with observed results; DoD: build ok, test_static 10 passed, full suite 152 passed, exit 0; browser-checked 3 datasets, AM/PM, S08 day-12 red point, maintenance flags, E01 no-limits state`
+
+### H-11 — Backend replay with causal as-of reports and corrected decision semantics
+
+**Points:** Extends effective working tool (25), valid statistical analysis (25) and demonstration (10)
+
+**Status:** `todo`
+
+**Owner:** `unassigned`
+
+**Started at:** `—`
+
+**Owns:** `app/app.py`, `app/availability.py`, `tests/test_api.py`, `tests/test_availability.py`, `docs/api.md`, `docs/availability.md`, `app/README.md`
+
+**Notes:** This is an APPROVED POST-COMPLETION CHANGE: sole ACTIVE ownership of these files transfers here from completed H-04/H-09, whose original check-ins remain historical evidence. Preserve the existing no-as_of API and 152 inherited tests. Add allowlisted GET /api/replay/timeline?dataset=<name>, returning dataset and available global five-minute timestamps only for days 11-15 (after the fixed ten-day historical baseline). Extend GET /api/report?dataset=<name>&as_of=YYYY-MM-DDTHH:MM, validating that as_of exactly matches a global replay timestamp, with 400/422 for invalid values as appropriate; only include station observations at/before as_of, and never let future observations influence latest-day actions or charts. Baseline remains the full original ten historical weekdays, never recomputed on a partial subset. Response includes as_of, complete/provisional status, current exact-timestamp station counts or explicit stale/missing status. Completed AM/PM windows retain the original p-chart, with exact limits from qc.py; an active window is provisional (observed d/n) and MUST NOT be called a completed special-cause event or in-control finding. Instantaneous empty/full/broken-station conditions can drive clearly labeled live triage independent of p-chart finality. Correct onset affected-day frequency denominator to the fixed ten baseline weekdays (disclose missing-day coverage). Maintain strict deterministic ordering. NO changes to qc.py, data/*.csv or Person B's generator.
+
+**Definition of done:** `python -m pytest tests/test_qc.py tests/test_loader.py tests/test_availability.py tests/test_maintenance.py tests/test_api.py -q` exits 0; new tests prove timeline length and order, day-11 replay start, no future observation leakage, unchanged historical endpoint, stable unchanged ten-day p_bar, exact partial n, no premature SPC flag, missing station timestamp staleness, invalid as_of rejection, onset denominator and maintenance at 07:00. `docs/api.md`, `docs/availability.md` and `app/README.md` document actual endpoints and provisional semantics.
+
+**Result:** `—`
+
+### H-12 — Simulated-live operator dashboard and visual release fixes
+
+**Points:** Improves working tool (25) and three-dataset demonstration (10)
+
+**Status:** `todo`
+
+**Owner:** `unassigned`
+
+**Started at:** `—`
+
+**Owns:** `app/frontend/`, `app/static/`, `tests/test_static.py`, `docs/integration.md`, `demo/README.md`
+
+**Notes:** Depends on VERIFIED H-11. Takes sole active ownership of frontend files from completed H-05. Preserve historical mode; add an unmistakably labeled SIMULATED LIVE control strip with Play/Pause, Next, Reset, speed, event-day jump, timestamp, no external network connection and a current station-status panel. Fetch replay timeline from Python and as-of report each step; no client-side statistical or dispatch calculations. Start at day 11 07:00 with baseline already established; replay only available 5-minute timestamps, skipping overnight/weekends. Demonstrate day-12 PM S08 event and days 13-15 maintenance surge, plus E01 no-control-limits and E02 missing timestamps. Keep unfinished subgroup visibly PROVISIONAL, never final SPC red flag. Fix PChart.jsx disconnected control-limit segments so true stepped line transitions are connected, and never plot missing/null p as zero; display missing gaps. Fix dispatch table to show both onset types or the action-relevant onset, and make row controls keyboard accessible. Visual objective: beautiful responsive shift-operations dashboard with compact KPIs, explicit action hierarchy and charts, high-contrast statuses, clean typography, mobile 390px, desktop 1280px, readable tables and skeleton/empty/error/stale states. Capture actual browser screenshots; don't claim visual tests without executing them. Produce documentation/demo updates now, not later.
+
+**Definition of done:** `npm --prefix app/frontend ci && npm --prefix app/frontend run build && python -m pytest tests/test_static.py -q && python -m pytest -q` exit 0; browser verifies replay controls, no leakage/provisional labeling, all three datasets, full historical mode, working relative URLs, chart gaps/stepped limits, accessible station selection, keyboard focus, mobile no-page-horizontal-overflow and desktop presentation. Record actual screenshots and observed replay outputs in `docs/integration.md` and `demo/README.md`.
+
+**Result:** `—`
+
+### H-13 — Release hardening, real-world data sourcing and verified handoff
+
+**Points:** Protects reproducibility (5), codebook (5), docs (10) and live-tool readiness (25)
+
+**Status:** `todo`
+
+**Owner:** `unassigned`
+
+**Started at:** `—`
+
+**Owns:** `app/testme.sh`, `.github/workflows/`, `docs/verification.md`, `docs/deployment.md`, `README.md`, `data/README.md`, `app/manifest.json`, `docs/plan.md`, `docs/REPLAY_RELEASE_PROMPT.md`
+
+**Notes:** Depends on H-12. Ownership of these files transfers from the previous completed/blocked tasks only for this scoped release pass. Implement optional Windows Git Bash venv path detection (.venv/Scripts/python.exe) while retaining Unix .venv/bin/python and the existing fast one-command startup. Add a real GitHub Actions TEST job independent of publisher secrets: Python 3.12 + pinned requirements -> pytest, Node/npm ci/build, verify included dataset copies and manifest/static bundle; deployment remains a separate credential-gated job. Keep deployment manifest in sync with changed API and built frontend; verify actual Connect package in isolation. Explicitly document sourcing from a real GBFS discovery/station_status feed, five-minute archival, timestamp and station time-zone handling, missing/stale collection, and baseline retention. Fresh-clone and headless-browser audit, rubric evidence and nonsecret screenshots. Original H-06 stays blocked until a REAL public URL passes logged-out tests; H-08 stays blocked until authorized Devpost submission and verified prompt number. No fabricated confirmations, secrets, live data or 100/100 judging score.
+
+**Definition of done:** `python -m pytest -q`, `npm --prefix app/frontend ci` and `npm --prefix app/frontend run build` pass in a fresh clone; cross-platform launch paths are verified or accurately labeled untested; CI test workflow completes successfully; `app/data/` equals the three source CSVs; app/manifest.json contains all required deployed assets with correct checksums; `data/README.md` explains exactly how operators could collect real GBFS data; deployment and release docs match observed results. Record the actual tests and any external blockers, including the public URL/Devpost only if verified.
+
+**Result:** `—`
 
 ### H-06 — Deploy one bundled FastAPI and React app to Posit Connect
 
