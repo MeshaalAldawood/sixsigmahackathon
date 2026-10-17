@@ -84,7 +84,7 @@ the team is confused.
 /superagent keep going
 ```
 
-**3. Watch it orchestrate.** 🎼 For each task in [`CONTRACT.yaml`](../CONTRACT.yaml) it:
+**3. Watch it orchestrate.** 🎼 For each task in [`CONTRACT.md`](../CONTRACT.md) it:
 
 1. 👷 hands the task to the **implementer** helper agent: tests first, then code, then run them;
 2. 🔍 hands any statistics to the **stats-reviewer** helper agent: every number vs. your known answer;
