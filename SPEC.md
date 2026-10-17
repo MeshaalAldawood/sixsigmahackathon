@@ -125,6 +125,26 @@ Fixed for every team:
   `qc.py`; separate tests; neither imports the other). Imports must work both from the repo root
   (`pytest`) and from inside `app/` (`testme.sh` and Posit Connect run from `app/`).
 
+### Synthetic replay of bundled datasets
+
+`GET /api/report?dataset=<name>&as_of=YYYY-MM-DDTHH:MM` optionally replays a local clock time.
+`GET /api/replay-clock?dataset=<name>` supplies timestamp-only navigation
+metadata and the paused post-calibration start clock; it contains no station
+measurements or chart values.
+Omitting `as_of` returns the completed historical report. Replay uses only source
+snapshots at or before that time for every measurement, action and station status.
+The original first ten weekdays in the source file remain the fixed baseline.
+Before the tenth baseline day's PM window closes at 18:00, baseline shares,
+limits, signals and typical first-unusable times are withheld. A rush window is
+provisional until its clock end (09:00 or 18:00); measured counts are visible,
+but its final signal and dispatch verdict are withheld. Missing snapshots
+reduce observed coverage and do not prolong the window. Station status reports
+the latest observed counts, timestamp and age; station IDs with no observation
+yet carry null measurements and an explicit missing marker, while old
+observations are labelled stale. Maintenance uses only the latest observed exact 07:00 network
+measurement and labels stale or incomplete station coverage. This is replay of
+synthetic bundled data, not a live GBFS connection.
+
 Fixed for every team:
 - Start from **one** demo in `demos/`, copied to `app/`. Keep its four-script contract
   (`testme`, `manifestme`, `deployme`, `README.md`); `testme` starts the tool with one command.

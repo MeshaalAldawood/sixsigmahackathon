@@ -35,11 +35,11 @@
 
 **Points:** 10 - Tool Documentation: 2-3 working test datasets (5), codebook (5)
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Codex implementer: h02_data`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 09:40`
 
 **Owns:** `data/`, `app/data_loader.py`, `tests/test_loader.py`, `tests/test_data.py`
 
@@ -47,17 +47,17 @@
 
 **Definition of done:** python -m pytest tests/test_data.py tests/test_loader.py -q && test -f data/stable.csv && test -f data/planted_events.csv && test -f data/edge_case.csv && test -f data/README.md; tests prove file schemas, checkpoint counts, shared baseline, seeded reproducibility, planted signals and missing-snapshot case. app/data_loader.py rejects invalid row counts and duplicates with row numbers and filters weekdays/rush windows; its tests pass here.
 
-**Result:** `—`
+**Result:** `15 loader/data tests passed; three reproducible synthetic CSVs, codebook and validated sorted loader delivered.`
 
 ### H-03 — One exact-binomial p-chart function with numeric tests
 
 **Points:** 25 - Tool Implementation: valid quality-control statistics in Python
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Codex implementer: h03_qc`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 09:40`
 
 **Owns:** `app/qc.py`, `app/requirements.txt`, `tests/test_qc.py`, `docs/statistics.md`
 
@@ -65,17 +65,17 @@
 
 **Definition of done:** python -m pytest tests/test_qc.py -q && test -f docs/statistics.md; numeric assertions reproduce every SPEC section-4 hand answer including changed-n limits, boundary equality, lower flags and invalid cases.
 
-**Result:** `—`
+**Result:** `13 QC tests passed; independent review confirmed the exact availability and maintenance limits and degenerate cases.`
 
 ### H-09 — Availability AM/PM decision module and tests
 
 **Points:** 25 - Working-tool implementation (availability portion)
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Codex implementer: h09_availability`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 09:44`
 
 **Owns:** `app/availability.py`, `tests/test_availability.py`, `docs/availability.md`
 
@@ -83,17 +83,17 @@
 
 **Definition of done:** python -m pytest tests/test_availability.py -q && test -f docs/availability.md; tests cover AM/PM separation, exact control limits, actions/precedence, missing snapshots, chronic target vs special-cause signal, median time and ties.
 
-**Result:** `—`
+**Result:** `5 availability tests passed; independent review confirmed separate windows, stepped limits, onset timing and action precedence.`
 
 ### H-10 — Maintenance 07:00 network p-chart and station list
 
 **Points:** 25 - Working-tool implementation (maintenance portion)
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Codex implementer: h10_maintenance`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 09:44`
 
 **Owns:** `app/maintenance.py`, `tests/test_maintenance.py`, `docs/maintenance.md`
 
@@ -101,17 +101,17 @@
 
 **Definition of done:** python -m pytest tests/test_maintenance.py -q && test -f docs/maintenance.md; tests cover 07:00 aggregation, no duplicate counting, exact binomial flags, changing broken share, zero denominator, station ordering and ties.
 
-**Result:** `—`
+**Result:** `7 maintenance tests passed; independent review confirmed exact 07:00 aggregation and the planted 40/400 signal.`
 
 ### H-04 — Complete FastAPI backend and pass hard backend test gate
 
 **Points:** 25 - Tool Implementation: effective, working REST API
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Codex implementer: h04_api`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 09:48`
 
 **Owns:** `app/app.py`, `app/__init__.py`, `app/testme.sh`, `app/manifestme.sh`, `app/deployme.sh`, `app/.python-version`, `app/README.md`, `tests/test_api.py`, `docs/api.md`
 
@@ -119,17 +119,17 @@
 
 **Definition of done:** python -m pytest tests/test_data.py tests/test_qc.py tests/test_availability.py tests/test_maintenance.py tests/test_loader.py tests/test_api.py -q exits 0; test -f app/testme.sh && test -f app/manifestme.sh && test -f app/deployme.sh && test -f app/README.md && test -f docs/api.md; verify both API endpoints with stable, planted_events, edge_case and invalid-name requests and startup from both the repo root and app/ directory.
 
-**Result:** `—`
+**Result:** `44 backend tests passed; all three reports, invalid-name handling, and root/app startup were verified.`
 
 ### H-05 — Minimal React frontend after backend gate and demo walk-through
 
 **Points:** 10 - Tool Design: clear demonstration on three test datasets
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Codex implementer: h05_frontend`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 09:53`
 
 **Owns:** `app/frontend/`, `app/static/`, `tests/test_static.py`, `docs/integration.md`, `demo/README.md`
 
@@ -137,7 +137,7 @@
 
 **Definition of done:** npm --prefix app/frontend run build && python -m pytest tests/test_static.py -q && python -m pytest -q; one local FastAPI origin renders a built React page, three datasets, AM/PM station and maintenance charts, recommended actions and warning states; demo/README.md walks through all three examples with actual observed results.
 
-**Result:** `—`
+**Result:** `React bundle built; 3 static tests and 47 full-suite tests passed with three dataset walkthroughs.`
 
 ### H-06 — Deploy one bundled FastAPI and React app to Posit Connect
 
@@ -190,5 +190,65 @@
 **Notes:** Confirm the previously unknown team name and exact Devpost prompt number in SPEC through the H-01 owner. Verify on-campus deadline, public repository, live demonstration and fresh-clone tests. Check .gitignore and absence of secrets; never falsely claim a submission or live service before verifying it.
 
 **Definition of done:** Fresh clone runs app/testme.sh and python -m pytest -q; public repository contains reproducible code and no credentials, Devpost submission references the repository and verified public Posit Connect URL; record the actual confirmation.
+
+**Result:** `—`
+
+### H-11 — Simulated replay backend and statistical integrity
+
+**Points:** Protects valid statistics and working-tool behavior
+
+**Priority:** `P0` replay cutoff and frozen baseline; `P1` onset denominator
+
+**Status:** `done`
+
+**Owner:** `Codex implementer: h11_replay`
+
+**Started at:** `2026-10-17 10:04`
+
+**Owns:** `SPEC.md`, `app/replay.py`, `app/app.py`, `app/availability.py`, `app/maintenance.py`, `tests/test_replay.py`, `tests/test_api.py`, `tests/test_availability.py`, `tests/test_maintenance.py`, `docs/api.md`, `docs/availability.md`, `docs/maintenance.md`
+
+**Notes:** Begin after H-04/H-05 gates. Add an optional as_of cutoff to the bundled synthetic report and return observed current station state without future observations. Keep the original first ten weekdays as the fixed baseline; withhold baseline-derived values before calibration completes. Mark incomplete AM/PM windows provisional, suppress final signals and verdicts, and expose coverage and staleness. Count onset days with observed baseline snapshots in the denominator and report missing days. See docs/plan.md for boundaries and fixtures. Reopen and transfer overlapping files from completed tasks only after their owners release them.
+
+**Definition of done:** python -m pytest tests/test_qc.py tests/test_availability.py tests/test_maintenance.py tests/test_api.py tests/test_replay.py -q exits 0; tests show future-suffix invariance at a fixed cutoff, frozen baseline, prebaseline and closing-boundary behavior, rewind, missing station/07:00 observations, onset 07:40 on 3 of 8 observed days when two baseline days are missing, and historical parity at the final cutoff. Independent numeric review records actual values.
+
+**Result:** `41 tests passed; independent review PASS: future-suffix invariance, frozen 10-day baseline, 09:00/18:00 provisional boundaries, rewind, missing/stale stations, onset 07:40 on 3 of 8 observed days, final-cutoff parity.`
+
+### H-12 — Replay controls, correct chart rendering and dashboard QA
+
+**Points:** Protects working-tool clarity and demonstration quality
+
+**Priority:** `P1`
+
+**Status:** `in_progress`
+
+**Owner:** `Codex implementer: h12_dashboard`
+
+**Started at:** `2026-10-17 10:18`
+
+**Owns:** `app/frontend/`, `app/static/`, `tests/test_static.py`, `docs/integration.md`, `demo/README.md`
+
+**Notes:** Begin after H-11. Add Play/Pause, seek, speed, snapshot steps, explicitly synthetic event jumps and current station status. Use backend values only. Draw connected stepped limits across valid observations and break at null values; never plot missing values at zero. Show provisional points and warnings. Polish mobile layout, keyboard access, focus, contrast and reduced motion. Record browser QA at desktop, tablet and phone sizes.
+
+**Definition of done:** npm --prefix app/frontend ci && npm --prefix app/frontend run test -- --run && npm --prefix app/frontend run build && python -m pytest tests/test_static.py -q exit 0; browser QA covers all three datasets, both windows, maintenance, rewind, null values, keyboard access and 1440px/768px/375px layouts with recorded screenshots and observations.
+
+**Result:** `—`
+
+### H-13 — Windows startup, CI and release bundle
+
+**Points:** Protects reproducibility, documentation and deployment
+
+**Priority:** `P2`
+
+**Status:** `todo`
+
+**Owner:** `unassigned`
+
+**Started at:** `—`
+
+**Owns:** `app/testme.ps1`, `app/testme.sh`, `app/manifestme.sh`, `app/deployme.sh`, `app/.python-version`, `app/requirements.txt`, `app/README.md`, `app/data/`, `app/manifest.json`, `.github/workflows/`, `.github/scripts/`, `tests/test_startup.py`, `README.md`, `docs/deployment.md`, `docs/verification.md`, `demo/screenshots/`
+
+**Notes:** Begin after H-12. Provide one-command PowerShell startup, real Python/frontend CI on Windows and Linux, final copied CSV/static assets and Connect manifest. Document replay and provisional semantics and capture desktop/mobile screenshots. Pull-request CI needs no publishing credentials; deployment needs a real logged-out check.
+
+**Definition of done:** python -m pytest -q && npm --prefix app/frontend ci && npm --prefix app/frontend run test -- --run && npm --prefix app/frontend run build exit 0; Windows and Linux CI jobs pass, fresh-clone startup works, copied datasets match approved sources, and the public logged-out deployment serves the page and all three reports. Record actual command output and URL; do not claim public deployment if credentials or access are unavailable.
 
 **Result:** `—`
