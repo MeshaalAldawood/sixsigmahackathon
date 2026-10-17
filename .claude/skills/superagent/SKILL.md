@@ -62,9 +62,15 @@ Do these in order, without being asked. `$ARGUMENTS` (or whatever the user typed
    - **Deploy early:** H-06 as soon as H-04 runs locally. A live URL by mid-event leaves time to fix.
    - After each task, run `check.sh` again and say what is next.
 
-   **Stop for the human only** at a real choice, before any `git commit` or `git push` (show the
-   diff and the exact command, then wait for "yes"), and when a deploy credential is needed (the
-   team pastes it into GitHub repo secrets or their own terminal, never into chat or a file).
+   **Human-approval mode:** by default stop before a commit/push and wait for "yes". When the
+   user's own invocation explicitly includes scoped **advance YES** for non-destructive task
+   commits/pushes and named branch merges (for example the reviewed, pasted
+   `docs/AUTONOMOUS_BUILD_PROMPT.md`), that is the human's authorization within precisely
+   its stated scope; do **not** ask for repetitive approvals. Still show every diff/command
+   in execution logs, run all real gates, respect interactive host prompts and branch
+   protection, and never force-push/delete teammates' work. Actions outside the granted
+   scope still require fresh permission. Missing external credentials or verified
+   submission details are blockers, never facts to invent.
 
 ## 1. Routing table
 
@@ -155,7 +161,7 @@ These cost teams hours before. The step prompts in `.opencode/commands/` hold th
 - Absolute imports (`from app.qc import ...`); everything starts from the repo root with one command.
 - No secrets in files, commits, logs or chat. Keys go in GitHub repo secrets or a gitignored `.env`.
 - The prompts are on Devpost. Never invent or guess one.
-- Stage explicit paths: `git add <file> ...`, never `git add .` or `-A`. Commit only after a yes.
+- Stage explicit paths: `git add <file> ...`, never `git add .` or `-A`. Commit only after a per-action yes or an explicit, scoped advance YES in the user's run prompt.
 - Write only inside the task's `owns` paths. Need another file? Stop and say which, and why.
 
 ## 7. Charter for a subagent
