@@ -1,4 +1,4 @@
-# SPEC: Bike-sharing station decisions (two-hour MVP)
+# SPEC: Bike-sharing station decisions
 
 This is the product contract. Follow the [hackathon rubric](docs/criteria.md). Implement **only** what is written here. Synthetic data is explicitly labeled; unconfirmed event information remains TBD.
 
