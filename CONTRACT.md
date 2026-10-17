@@ -161,11 +161,11 @@
 
 **Points:** 10 - Tool Documentation: complete user and function documentation
 
-**Status:** `todo`
+**Status:** `in_progress`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator); independent auditor subagent`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:30`
 
 **Owns:** `README.md`, `docs/verification.md`
 
@@ -179,11 +179,11 @@
 
 **Points:** 5 - Tool Documentation: public reproducible GitHub repository
 
-**Status:** `todo`
+**Status:** `in_progress`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:31`
 
 **Owns:** `.gitignore`
 
