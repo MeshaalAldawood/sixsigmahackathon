@@ -12,3 +12,9 @@ rsconnect/
 .opencode/model-ladder-state.json
 
 .claude/settings.local.json
+
+# Python environment and caches made by app/testme.sh and pytest
+.venv/
+.pytest_cache/
+# rsconnect-python deployment records (contain the server address)
+rsconnect-python/

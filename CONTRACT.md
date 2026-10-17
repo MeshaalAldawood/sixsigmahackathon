@@ -35,11 +35,11 @@
 
 **Points:** 10 - Tool Documentation: 2-3 working test datasets (5), codebook (5)
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator); prior draft by Mohammed Albarrak`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:10`
 
 **Owns:** `data/`, `app/data_loader.py`, `tests/test_loader.py`, `tests/test_data.py`
 
@@ -47,17 +47,17 @@
 
 **Definition of done:** python -m pytest tests/test_data.py tests/test_loader.py -q && test -f data/stable.csv && test -f data/planted_events.csv && test -f data/edge_case.csv && test -f data/README.md; tests prove file schemas, checkpoint counts, shared baseline, seeded reproducibility, planted signals and missing-snapshot case. app/data_loader.py rejects invalid row counts and duplicates with row numbers and filters weekdays/rush windows; its tests pass here.
 
-**Result:** `—`
+**Result:** `data/generate.py (seed 20261016, fixed integer patterns) writes stable/planted_events 7200 rows and edge_case 1432 rows, codebook data/README.md, app/data_loader.py load_dataset; DoD printed 57 passed, exit 0; via qc: stable 0 flags, planted only S08 PM day12 plus maintenance days 13-15`
 
 ### H-03 — One exact-binomial p-chart function with numeric tests
 
 **Points:** 25 - Tool Implementation: valid quality-control statistics in Python
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:07`
 
 **Owns:** `app/qc.py`, `app/requirements.txt`, `tests/test_qc.py`, `docs/statistics.md`
 
@@ -65,17 +65,17 @@
 
 **Definition of done:** python -m pytest tests/test_qc.py -q && test -f docs/statistics.md; numeric assertions reproduce every SPEC section-4 hand answer including changed-n limits, boundary equality, lower flags and invalid cases.
 
-**Result:** `—`
+**Result:** `app/qc.py exact-binomial p_chart (scipy 1.18.1, pinned app/requirements.txt) and docs/statistics.md; DoD printed 30 passed, exit 0; independent stats-reviewer table OVERALL PASS on every SPEC .125/.10 answer plus n=200 u=34`
 
 ### H-09 — Availability AM/PM decision module and tests
 
 **Points:** 25 - Working-tool implementation (availability portion)
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:15`
 
 **Owns:** `app/availability.py`, `tests/test_availability.py`, `docs/availability.md`
 
@@ -83,17 +83,17 @@
 
 **Definition of done:** python -m pytest tests/test_availability.py -q && test -f docs/availability.md; tests cover AM/PM separation, exact control limits, actions/precedence, missing snapshots, chronic target vs special-cause signal, median time and ties.
 
-**Result:** `—`
+**Result:** `app/availability.py build_availability AM/PM station p-charts and first-match dispatch rows, docs/availability.md; DoD printed 23 passed, exit 0; independent review recomputed 660 points from raw CSVs, 0 mismatches, OVERALL PASS`
 
 ### H-10 — Maintenance 07:00 network p-chart and station list
 
 **Points:** 25 - Working-tool implementation (maintenance portion)
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:15`
 
 **Owns:** `app/maintenance.py`, `tests/test_maintenance.py`, `docs/maintenance.md`
 
@@ -101,17 +101,17 @@
 
 **Definition of done:** python -m pytest tests/test_maintenance.py -q && test -f docs/maintenance.md; tests cover 07:00 aggregation, no duplicate counting, exact binomial flags, changing broken share, zero denominator, station ordering and ties.
 
-**Result:** `—`
+**Result:** `app/maintenance.py build_maintenance exact-07:00 network p-chart (n=200, limits 8-34) and ranked broken-bike list, docs/maintenance.md; DoD printed 15 passed, exit 0; independent review OVERALL PASS, planted flags exactly 09-30, 10-01, 10-02`
 
 ### H-04 — Complete FastAPI backend and pass hard backend test gate
 
 **Points:** 25 - Tool Implementation: effective, working REST API
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:21`
 
 **Owns:** `app/app.py`, `app/__init__.py`, `app/testme.sh`, `app/manifestme.sh`, `app/deployme.sh`, `app/.python-version`, `app/README.md`, `tests/test_api.py`, `docs/api.md`
 
@@ -119,17 +119,17 @@
 
 **Definition of done:** python -m pytest tests/test_data.py tests/test_qc.py tests/test_availability.py tests/test_maintenance.py tests/test_loader.py tests/test_api.py -q exits 0; test -f app/testme.sh && test -f app/manifestme.sh && test -f app/deployme.sh && test -f app/README.md && test -f docs/api.md; verify both API endpoints with stable, planted_events, edge_case and invalid-name requests and startup from both the repo root and app/ directory.
 
-**Result:** `—`
+**Result:** `app/app.py FastAPI GET /api/datasets and /api/report over the 3 whitelisted CSVs plus four-script contract, app/README.md, docs/api.md; backend gate printed 142 passed, exit 0; real servers from repo root and app/ answered all 3 reports, 400 for ../SPEC.md, 422 for missing name; testme.sh served HTTP 200`
 
 ### H-05 — Minimal React frontend after backend gate and demo walk-through
 
 **Points:** 10 - Tool Design: clear demonstration on three test datasets
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:22`
 
 **Owns:** `app/frontend/`, `app/static/`, `tests/test_static.py`, `docs/integration.md`, `demo/README.md`
 
@@ -137,17 +137,17 @@
 
 **Definition of done:** npm --prefix app/frontend run build && python -m pytest tests/test_static.py -q && python -m pytest -q; one local FastAPI origin renders a built React page, three datasets, AM/PM station and maintenance charts, recommended actions and warning states; demo/README.md walks through all three examples with actual observed results.
 
-**Result:** `—`
+**Result:** `React page in app/frontend built to app/static and served by FastAPI on one origin, docs/integration.md, demo/README.md with observed results; DoD: build ok, test_static 10 passed, full suite 152 passed, exit 0; browser-checked 3 datasets, AM/PM, S08 day-12 red point, maintenance flags, E01 no-limits state`
 
 ### H-06 — Deploy one bundled FastAPI and React app to Posit Connect
 
 **Points:** Protects 25 working-tool points - public app required
 
-**Status:** `todo`
+**Status:** `blocked`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:28`
 
 **Owns:** `app/data/`, `app/manifest.json`, `.github/workflows/`, `.github/scripts/`, `docs/deployment.md`
 
@@ -155,17 +155,17 @@
 
 **Definition of done:** A public Posit Connect URL, visited logged out, serves the React page and all three whitelisted reports with HTTP 200; deployment docs contain actual test commands/results and URL, and app/data/ contains the exact three approved CSVs.
 
-**Result:** `—`
+**Result:** `BLOCKED on course Connect publisher credentials (none on this machine; deployme.sh exited 1). Prepared: app/data byte-identical CSVs, app/manifest.json (python-fastapi, app:app, 3.12.14), .github workflow with APP_DIR app; the 18-file bundle ran alone and returned 200 for / and all 3 reports. No public URL yet; steps in docs/deployment.md`
 
 ### H-07 — Audit incremental documentation and reproducibility
 
 **Points:** 10 - Tool Documentation: complete user and function documentation
 
-**Status:** `todo`
+**Status:** `done`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator); independent auditor subagent`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:30`
 
 **Owns:** `README.md`, `docs/verification.md`
 
@@ -173,17 +173,17 @@
 
 **Definition of done:** python -m pytest -q passes and test -f README.md && test -f docs/verification.md; a fresh-clone reader can run app/testme.sh and reproduce exact binomial hand-answer checks and the three dataset demonstrations from documentation.
 
-**Result:** `—`
+**Result:** `Tool README.md replaces the event front page; docs/verification.md records 3 independent reviews; DoD printed 152 passed, exit 0; fresh-clone audit: testme up in 28 s, 152 passed, identical page build, every documented number reproduced; its 3 doc defects fixed (incl. statistics.md n*p_bar wording, returned to H-03 docs)`
 
 ### H-08 — Verify reproducible public repo and submit on Devpost
 
 **Points:** 5 - Tool Documentation: public reproducible GitHub repository
 
-**Status:** `todo`
+**Status:** `blocked`
 
-**Owner:** `unassigned`
+**Owner:** `Claude (overnight coordinator)`
 
-**Started at:** `—`
+**Started at:** `2026-10-17 01:31`
 
 **Owns:** `.gitignore`
 
@@ -191,4 +191,4 @@
 
 **Definition of done:** Fresh clone runs app/testme.sh and python -m pytest -q; public repository contains reproducible code and no credentials, Devpost submission references the repository and verified public Posit Connect URL; record the actual confirmation.
 
-**Result:** `—`
+**Result:** `Verified: fresh clone of e9bde45 ran app/testme.sh (up in 26 s, / and 3 reports HTTP 200) and pytest (152 passed); repo public; no credentials in git; .gitignore now covers .venv. NOT done: Devpost submission (not authorized for the agent), public Connect URL (H-06 blocked on publisher key), official prompt number still unconfirmed in SPEC`
