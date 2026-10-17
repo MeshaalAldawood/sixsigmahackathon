@@ -22,7 +22,7 @@ Setup takes about 15 minutes when the Wi-Fi is quiet. Do it before the event.
 - [ ] `/models` shows `gemini-3.5-flash` (Gemini 3.5 Flash) and `gemini-3.1-flash-lite` (Gemini 3.1 Flash Lite).
 - [ ] One test question answered on campus Wi-Fi (or the network you will use).
 - [ ] Optional backup: GitHub Student Developer Pack verified, for Copilot ([`agents.md`](agents.md)).
-- [ ] This repo cloned, and `SPEC.md` and `CONTRACT.yaml` seen once (you will ask the agent to update `SPEC.md`, not edit it by hand).
+- [ ] This repo cloned, and `SPEC.md` and `CONTRACT.md` seen once (you will ask the agent to update `SPEC.md`, not edit it by hand).
 
 ---
 
@@ -205,7 +205,7 @@ The quickest start is one command: `/superagent <your app>`. The step commands b
 
 > What is this repo for, and which files describe our project? Two sentences.
 
-It should name `SPEC.md` and `CONTRACT.yaml`. That proves the key, the model and the repo are all connected.
+It should name `SPEC.md` and `CONTRACT.md`. That proves the key, the model and the repo are all connected.
 
 **Minute 10-20: describe your app, and ask the agent to write the SPEC.** You do not fill in
 [`SPEC.md`](../SPEC.md) by hand, and you do not need to read all of it. As a team, agree on a few
@@ -227,7 +227,7 @@ you mean: the agent guesses whatever the SPEC leaves blank, and `/build` takes i
 section 4. (`grep -c "FILL IN[.,]" SPEC.md` prints 0 when every blank is filled.)
 
 **Minute 20-30: `/plan`, then `/decide`.** Type `/new`, then `/plan`. The planner reads `SPEC.md` and
-`CONTRACT.yaml`, states the statistic and its formula, asks all its open questions in one numbered list,
+`CONTRACT.md`, states the statistic and its formula, asks all its open questions in one numbered list,
 and after your one reply writes `docs/plan.md`. It does not touch code.
 A good plan for the bolt example states the formulas before any task:
 
@@ -258,7 +258,7 @@ Run `/decide` later for anything still open.
 Read `docs/plan.md` as a team. If a formula looks wrong, say so now. Fixing a sentence is free; fixing code is not.
 
 **Minute 30-45: `/build H-03`.** Type `/new`, then `/build H-03`. H-03 is the first statistics task in
-[`CONTRACT.yaml`](../CONTRACT.yaml): one plain, tested function. The agent reads `SPEC.md` and
+[`CONTRACT.md`](../CONTRACT.md): one plain, tested function. The agent reads `SPEC.md` and
 `docs/plan.md`, restates the statistic and its formula in one sentence (check it: if it is not your
 method, stop it there), checks the task out with the real time, writes `tests/test_qc.py` and
 `app/qc.py`, and runs the tests. It builds only; it does not review itself and never commits.
@@ -300,11 +300,11 @@ Can each of you explain every number the test printed? If not, ask the agent to 
 plain English.
 
 **Minute 55-60: `/checkin H-03`.** It runs the task's `definition_of_done`, marks the task `done` in
-`CONTRACT.yaml` with a one-line result, shows you the diff and asks "Commit these files? (yes/no)".
+`CONTRACT.md` with a one-line result, shows you the diff and asks "Commit these files? (yes/no)".
 OpenCode also asks permission before any `git commit` or `git push` (the repo's `opencode.json` says
 so): choose **allow once** only after your team has read the diff, and never **allow always** for a
 commit. That permission prompt is the real yes: a free model may skip the question and go straight to
-the commit. Check in `git diff CONTRACT.yaml` that only `status` and `result` changed and `owner` and
+the commit. Check in `git diff CONTRACT.md` that only `status` and `result` changed and `owner` and
 `started_at` are still there.
 
 <!-- VERIFIED 2026-10-11: OpenCode's permission prompt fired on the `git add` + `git commit` call, and Reject blocked both; a free model skipped the "Commit these files?" question; a check-in changed only `status` and `result`. -->
